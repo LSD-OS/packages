@@ -1,0 +1,155 @@
+# Maintainer: Wendel Peterson <wende08@proton.me>
+
+pkgbase=gdm
+pkgname=(gdm libgdm gdm-devel gdm-dinit)
+pkgver=48.0
+pkgrel=1
+pkgdesc="Display manager and login screen"
+url="https://wiki.gnome.org/Projects/GDM"
+arch=(x86_64)
+license=(GPL-2.0-or-later)
+makedepends=(
+  accountsservice
+  dconf
+  elogind
+  gettext
+  glib2-devel
+  gobject-introspection
+  iso-codes
+  itstool
+  libcanberra
+  libgudev
+  libsm
+  meson
+  nss
+  pam
+  pkgconf
+  polkit
+  upower
+)
+source=(
+  "https://download.gnome.org/sources/gdm/${pkgver%%.*}/gdm-$pkgver.tar.xz"
+  gdm.dinit
+)
+# Checksum do tarball = o mesmo do template do Void. gdm.dinit: rode updpkgsums.
+sha256sums=('1bc06daff093ec7b5e37ecb4f92e5da3474a1b1ba076edb9151ee967d1c30adf'
+            'SKIP')
+
+build() {
+  local meson_options=(
+    -D default-pam-config=arch
+    -D at-spi-registryd-dir=/usr/lib
+    -D tcp-wrappers=false
+    -D screenshot-dir=/var/lib/gdm/greeter
+    -D plymouth=disabled
+    -D xauth-dir=/run/gdm
+    -D pid-file=/run/gdm/gdm.pid
+    -D systemd-journal=false
+    -D initial-vt=7
+    -D wayland-support=true
+    -D selinux=disabled
+    -D libaudit=disabled
+    -D gdm-xsession=true
+    -D default-path=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/sbin:/bin
+    -D systemdsystemunitdir=/usr/lib/systemd/system
+    -D systemduserunitdir=/usr/lib/systemd/user
+    -D logind-provider=elogind
+  )
+
+  meson setup build "gdm-$pkgver" \
+    --prefix /usr \
+    --libexecdir lib \
+    --sbindir bin \
+    --buildtype plain \
+    --wrap-mode nodownload \
+    "${meson_options[@]}"
+  meson compile -C build
+}
+
+_pick() {
+  local p="$1" f d; shift
+  for f; do
+    d="$srcdir/$p/${f#$pkgdir/}"
+    mkdir -p "$(dirname "$d")"
+    mv "$f" "$d"
+    rmdir -p --ignore-fail-on-non-empty "$(dirname "$f")"
+  done
+}
+
+package_gdm() {
+  depends=(
+    accountsservice
+    dbus
+    dconf
+    elogind
+    gnome-session
+    gnome-settings-daemon
+    gnome-shell
+    gnome-themes-extra
+    gsettings-desktop-schemas
+    iso-codes
+    libcanberra
+    libgdm
+    libgudev
+    pam
+    polkit
+    upower
+    xorg-server
+    xorg-xrdb
+    xorg-xwayland
+  )
+  optdepends=('gdm-dinit: serviço dinit para iniciar o gdm no boot')
+  backup=(
+    etc/gdm/custom.conf
+    etc/pam.d/gdm-autologin
+    etc/pam.d/gdm-fingerprint
+    etc/pam.d/gdm-launch-environment
+    etc/pam.d/gdm-password
+    etc/pam.d/gdm-smartcard
+  )
+
+  meson install -C build --destdir "$pkgdir"
+
+  local f
+  for f in "$pkgdir"/etc/pam.d/*; do
+    if grep -q "pam_systemd.so" "$f"; then
+      sed -i "s/pam_systemd\.so/pam_elogind.so/" "$f"
+    fi
+  done
+
+  install -dm755 "$pkgdir/usr/share/gdm/env.d" "$pkgdir/etc/gdm/env.d"
+
+  install -d "$pkgdir/usr/lib/sysusers.d" "$pkgdir/usr/lib/tmpfiles.d"
+  echo 'u gdm - "Gnome Display Manager" /var/lib/gdm' \
+    > "$pkgdir/usr/lib/sysusers.d/gdm.conf"
+  echo 'd /var/lib/gdm 1770 gdm gdm -' \
+    > "$pkgdir/usr/lib/tmpfiles.d/gdm.conf"
+
+  _pick libgdm "$pkgdir"/usr/lib/libgdm.so.*
+
+  _pick gdm-devel "$pkgdir"/usr/include
+  _pick gdm-devel "$pkgdir"/usr/lib/pkgconfig
+  _pick gdm-devel "$pkgdir"/usr/share/gir-1.0
+  _pick gdm-devel "$pkgdir"/usr/lib/libgdm.so
+}
+
+package_libgdm() {
+  pkgdesc+=" - runtime libraries"
+  depends=(glib2)
+
+  mv libgdm/* "$pkgdir"
+}
+
+package_gdm-devel() {
+  pkgdesc+=" - development files"
+  depends=("libgdm=$pkgver" elogind)
+
+  mv gdm-devel/* "$pkgdir"
+}
+
+package_gdm-dinit() {
+  pkgdesc="Serviço dinit para o gdm"
+  depends=(gdm dinit dbus elogind-dinit)
+
+  install -Dm644 gdm.dinit "$pkgdir/etc/dinit.d/gdm"
+}

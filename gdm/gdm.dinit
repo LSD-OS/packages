@@ -1,0 +1,8 @@
+# Serviço dinit do GDM
+type            = process
+command         = /usr/bin/gdm
+restart         = true
+smooth-recovery = true
+stop-timeout    = 10.0
+depends-on      = dbus
+depends-on      = elogind

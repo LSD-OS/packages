@@ -1,0 +1,31 @@
+# Maintainer: Wendel <wende08@proton.me>
+pkgname=lsd-live-dinit
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Dinit service overrides and live ISO boot configuration for LSD_OS!"
+arch=('any')
+url="https://github.com/wendel"
+license=('GPL3')
+depends=('dinit')
+provides=('lsd-live-dinit')
+conflicts=()
+source=(
+    'early-root-rw.target'
+    'fsck-root'
+    'root-ro'
+)
+sha256sums=(
+    'SKIP'
+    'SKIP'
+    'SKIP'
+)
+
+package() {
+    # Cria diretório dos serviços do Dinit
+    install -d -m 0755 "${pkgdir}/etc/dinit.d"
+
+    # Instala os overrides de serviços para Live ISO
+    install -m 0644 "${srcdir}/early-root-rw.target" "${pkgdir}/etc/dinit.d/early-root-rw.target"
+    install -m 0644 "${srcdir}/fsck-root" "${pkgdir}/etc/dinit.d/fsck-root"
+    install -m 0644 "${srcdir}/root-ro" "${pkgdir}/etc/dinit.d/root-ro"
+}
