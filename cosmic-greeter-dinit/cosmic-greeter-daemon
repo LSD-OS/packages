@@ -1,0 +1,9 @@
+# Daemon D-Bus com.system76.CosmicGreeter: o greeter consulta get_user_data
+# para listar usuários. Pronto quando o nome aparece no bus (mesmo idiom do
+# serviço elogind da distro).
+type               = process
+command            = /usr/lib/dinit/dbus-wait-for -s -f 4 -n com.system76.CosmicGreeter /usr/bin/cosmic-greeter-daemon
+smooth-recovery    = true
+depends-on         = dbus
+ready-notification = pipefd:4
+logfile            = /var/log/dinit/cosmic-greeter-daemon.log

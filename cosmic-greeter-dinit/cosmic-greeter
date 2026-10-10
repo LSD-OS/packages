@@ -1,0 +1,9 @@
+# greetd com o config do greeter COSMIC. O pacote cosmic-greeter traz
+# /etc/greetd/cosmic-greeter.toml (command = cosmic-greeter-start, user =
+# cosmic-greeter); é o que a unit cosmic-greeter.service do Pop!_OS faz.
+type            = process
+command         = /usr/bin/greetd --config /etc/greetd/cosmic-greeter.toml
+smooth-recovery = true
+depends-on      = login.target
+waits-for       = cosmic-greeter-daemon
+logfile         = /var/log/dinit/cosmic-greeter.log

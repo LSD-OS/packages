@@ -1,0 +1,32 @@
+# Maintainer: Wendel <wende08@proton.me>
+pkgname=cosmic-greeter-dinit
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Serviços dinit para o cosmic-greeter (greetd com o greeter COSMIC e daemon D-Bus)"
+arch=('any')
+url="https://github.com/pop-os/cosmic-greeter"
+license=('GPL3')
+depends=('cosmic-greeter' 'dinit' 'dbus' 'elogind-dinit')
+provides=('init-cosmic-greeter' 'init-displaymanager')
+conflicts=('init-cosmic-greeter' 'init-displaymanager')
+source=(
+    'cosmic-greeter'
+    'cosmic-greeter-daemon'
+)
+sha256sums=(
+    'SKIP'
+    'SKIP'
+)
+
+package() {
+    # Cria diretório dos serviços do Dinit
+    install -d -m 0755 "${pkgdir}/etc/dinit.d"
+
+    # greetd apontado para o config do greeter COSMIC (espelha a unit
+    # cosmic-greeter.service do Pop!_OS)
+    install -m 0644 "${srcdir}/cosmic-greeter" "${pkgdir}/etc/dinit.d/cosmic-greeter"
+
+    # Daemon D-Bus com.system76.CosmicGreeter: fornece ao greeter a lista de
+    # usuários (get_user_data)
+    install -m 0644 "${srcdir}/cosmic-greeter-daemon" "${pkgdir}/etc/dinit.d/cosmic-greeter-daemon"
+}
