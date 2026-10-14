@@ -1,11 +1,13 @@
 # TUI de boas-vindas da ISO live (idioma, layout de teclado, timezone).
-# Roda no console (tty1) antes do greeter: "Iniciar ISO live" sai 0 e o
-# greeter sobe; "linha de comando" vira este processo e o greeter só sobe
-# quando o bash terminar. O gate está no serviço cosmic-greeter
-# (waits-for = lsd-welcome, anexado na build da ISO em
+# Roda na tty1 antes do greeter: o script abre /dev/tty1 diretamente (mesmo
+# mecanismo do agetty) — NÃO usar runs-on-console aqui: o login.target da
+# Artix (type = internal + runs-on-console) segura o console para sempre
+# e um serviço runs-on-console ficaria preso na fila ("waiting for
+# console"). A build da ISO remove o getty@tty1 do airootfs para este
+# serviço ser o dono da tty1. "Iniciar ISO live" sai 0 e o greeter sobe
+# (gate no cosmic-greeter: waits-for = lsd-welcome, anexado na build em
 # run_before_squashfs.sh — fail-open: se o welcome falhar, o greeter
 # sobe mesmo assim).
 type            = scripted
 command         = /usr/bin/lsd-welcome
 depends-on      = login.target
-options         = runs-on-console

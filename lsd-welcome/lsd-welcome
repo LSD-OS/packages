@@ -6,12 +6,22 @@
 # Adicionar sistema de versionamento no script before squashfs
 # Mudar script do calamares. ELe contem comandos openrc.
 
+# No boot roda via dinit SEM runs-on-console: o login.target da Artix
+# (type = internal + runs-on-console) segura o console para sempre e um
+# serviço runs-on-console ficaria preso na fila ("waiting for console").
+# Em vez disso, abre a tty1 diretamente — o mesmo mecanismo do agetty
+# (é por isso que os getty@ttyN funcionam sem opção de console). Se já
+# tem terminal (usuário rodou "lsd-welcome" num shell), usa o que tem.
+if [ ! -t 0 ] && [ -e /dev/tty1 ]; then
+    exec </dev/tty1 >/dev/tty1 2>/dev/tty1
+fi
+
 export LANG=C.UTF-8
 export LC_ALL=C.UTF-8
 printf '\e%G'
 
-# No boot roda no console (serviço dinit com runs-on-console): silencia as
-# mensagens do kernel para não sujarem a TUI.
+# No boot roda na tty1 (aberta acima): silencia as mensagens do kernel
+# para não sujarem a TUI.
 sudo dmesg -n 1 2> /dev/null || true
 
 L=$'\e[999C\e[54D.......             ....  ...  ....
@@ -147,12 +157,15 @@ select_item() {
       fi
     done
     printf '\e[2;1H%s' "$L"
-    read -rsn3 k
-    case $k in
-      $'\e[A') ((sel>0)) && ((sel--)) ;;
-      $'\e[B') ((sel<${#items[@]}-1)) && ((sel++)) ;;
-      '') break ;;
-    esac
+    # -t 0.4: redesenha periodicamente; mensagens tardias do dinit/gettys
+    # no console não deixam sujeira na tela (timeout só refaz o loop)
+    if read -rsn3 -t 0.4 k; then
+      case $k in
+        $'\e[A') ((sel>0)) && ((sel--)) ;;
+        $'\e[B') ((sel<${#items[@]}-1)) && ((sel++)) ;;
+        '') break ;;
+      esac
+    fi
   done
   SELECTED_IDX=$sel
 }
@@ -294,12 +307,14 @@ while :; do
     done
     
     printf '\e[2;1H%s' "$L"
-    read -rsn3 k
-    case $k in
-      $'\e[A') ((s>0)) && ((s--)) ;;
-      $'\e[B') ((s<4)) && ((s++)) ;;
-      '') break ;;
-    esac
+    # -t 0.4: redesenha periodicamente (ver select_item)
+    if read -rsn3 -t 0.4 k; then
+      case $k in
+        $'\e[A') ((s>0)) && ((s--)) ;;
+        $'\e[B') ((s<4)) && ((s++)) ;;
+        '') break ;;
+      esac
+    fi
   done
 
   case $s in
