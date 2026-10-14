@@ -1,0 +1,328 @@
+#!/usr/bin/env bash
+
+# Ideias:
+# Ao selecionar lingua, mostrar os layout de teclado relacionado a lingua primeiro
+# Adicionar verficador de versão.
+# Adicionar sistema de versionamento no script before squashfs
+# Mudar script do calamares. ELe contem comandos openrc.
+
+export LANG=C.UTF-8
+export LC_ALL=C.UTF-8
+printf '\e%G'
+
+# No boot roda no console (serviço dinit com runs-on-console): silencia as
+# mensagens do kernel para não sujarem a TUI.
+sudo dmesg -n 1 2> /dev/null || true
+
+L=$'\e[999C\e[54D.......             ....  ...  ....
+\e[999C\e[54D.......           ......  ...  ......
+\e[999C\e[54D.......       ......      ...      .....
+\e[999C\e[54D   ....     ....    ....  ...  ...    ....
+\e[999C\e[54D   ....    ...   .......  ...  ......   ....
+\e[999C\e[54D   ....  ....  .........  ...  ........   ...
+\e[999C\e[54D   .... ....  ..........  ...  .........   ...
+\e[999C\e[54D   .... ...   ..........  ...  ..........   ...
+\e[999C\e[54D   .... ..       ............  ..........   ...
+\e[999C\e[54D   .... .........         ...  ..........   ...
+\e[999C\e[54D   .... ...  ...........  ...  ..........   ...
+\e[999C\e[54D   .... ...   ..........  ...  .........   ...
+\e[999C\e[54D   ....  ...   .........  ...  ........   ...
+\e[999C\e[54D   ....   ....   .......  ...   ......   ...
+\e[999C\e[54D   ....     ....    ....  ...  ....    ....
+\e[999C\e[54D   ....       .....       ...       .....
+\e[999C\e[54D   ....          .......  ...   ......
+\e[999C\e[54D   ....             ....  ...   ....
+\e[999C\e[54D   ................................... . . . ..
+\e[999C\e[54D   ................................... . . . ..'
+
+printf '\e[?25l'
+trap 'printf "\e[?25h\e[0m\n"' EXIT
+
+langs=(
+    "Português (Brasil)|br|pt_BR.UTF-8"
+    "Português (Portugal)|pt|pt_PT.UTF-8"
+	"Español|es|es_ES.UTF-8"
+    "English|en|en_US.UTF-8"
+)
+
+keyboards=(
+    "ABNT2 (Brazil)|br"
+    "QWERTY (Portugal)|pt"
+    "QWERTY (Spain)|es"
+    "QWERTY (US)|us"
+)
+
+t_nav="Use ↑ ↓ then Enter."
+t_w="Welcome to LSD_OS!"
+t_l="Launch live ISO"
+t_ld="requires hardware acceleration"
+t_c="Access command line"
+t_cd="for repair or advanced users"
+t_e='To return to the welcome menu, simply run "lsd-welcome"'
+t_cl="Change language"
+t_kb="Change keyboard layout"
+t_tz="Change timezone"
+t_tzd="set your local time"
+t_m="in case you made a mistake"
+
+apply_translations() {
+    case "$lang_code" in
+        es)
+          t_nav="Use ↑ ↓ then Enter."
+          t_w="¡Bienvenido a LSD_OS!"
+          t_l="Lanzar ISO live"
+          t_ld="requiere aceleración por hardware"
+          t_c="Acceder a la línea de comandos"
+          t_cd="para reparación o usuarios avanzados"
+          t_e='Para volver al menú de bienvenida, simplemente ejecute "lsd-welcome"'
+          t_cl="Cambiar idioma"
+          t_kb="Cambiar teclado"
+          t_tz="Cambiar zona horaria"
+          t_tzd="establece tu hora local"
+          t_m="en caso de que te hayas equivocado"
+          ;;
+        pt)
+          t_nav="Use ↑ ↓ e depois Enter."
+          t_w="Bem-vindo ao LSD_OS!"
+          t_l="Iniciar ISO live"
+          t_ld="requer aceleração de hardware"
+          t_c="Aceder à linha de comandos"
+          t_cd="para reparação ou utilizadores avançados"
+          t_e='Para voltar ao menu de boas-vindas, basta executar "lsd-welcome"'
+          t_cl="Mudar idioma"
+          t_kb="Mudar teclado"
+          t_tz="Mudar fuso horário"
+          t_tzd="defina a sua hora local"
+          t_m="caso se tenha enganado"
+          ;;
+        br)
+          t_nav="Use ↑ ↓ e então Enter."
+          t_w="Bem-vindo ao LSD_OS!"
+          t_l="Iniciar ISO live"
+          t_ld="requer aceleração de hardware"
+          t_c="Acessar linha de comando"
+          t_cd="para reparo ou usuários avançados"
+          t_e='Para retornar ao menu de boas-vindas, basta executar "lsd-welcome"'
+          t_cl="Mudar idioma"
+          t_kb="Mudar teclado"
+          t_tz="Mudar fuso horário"
+          t_tzd="defina sua hora local"
+          t_m="caso você tenha errado"
+          ;;
+        *) 
+          t_nav="Use ↑ ↓ then Enter."
+          t_w="Welcome to LSD_OS!"
+          t_l="Launch live ISO"
+          t_ld="requires hardware acceleration"
+          t_c="Access command line"
+          t_cd="for repair or advanced users"
+          t_e='To return to the welcome menu, simply run "lsd-welcome"'
+          t_cl="Change language"
+          t_kb="Change keyboard layout"
+          t_tz="Change timezone"
+          t_tzd="set your local time"
+          t_m="in case you made a mistake"
+          ;;
+      esac
+}
+
+select_item() {
+  local title="$1" arr_name="$2" w="$3"
+  local -n items="$arr_name"
+  local sel=0
+  while :; do
+    printf '\e[H\e[J\e[8;6H\e[1;33m%s\e[0m\n\n\e[6G%s\n\n' "$title" "$t_nav"
+    local max_display=12 start=0
+    if (( sel > max_display / 2 )); then start=$((sel - max_display / 2)); fi
+    if (( start + max_display > ${#items[@]} )); then start=$((${#items[@]} - max_display)); fi
+    if (( start < 0 )); then start=0; fi
+    
+    for i in $(seq $start $((start + max_display - 1))); do
+      if (( i >= ${#items[@]} )); then break; fi
+      local name="${items[$i]%%|*}"
+      if (( i == sel )); then
+        printf '\e[6G\e[44;97m > %-*s\e[0m\n' "$w" "$name"
+      else
+        printf '\e[6G   %-*s\n' "$w" "$name"
+      fi
+    done
+    printf '\e[2;1H%s' "$L"
+    read -rsn3 k
+    case $k in
+      $'\e[A') ((sel>0)) && ((sel--)) ;;
+      $'\e[B') ((sel<${#items[@]}-1)) && ((sel++)) ;;
+      '') break ;;
+    esac
+  done
+  SELECTED_IDX=$sel
+}
+
+setup_language() {
+  select_item "Select your language" langs 22
+  lang_sel=$SELECTED_IDX
+  selected_lang="${langs[$lang_sel]}"
+  lang_code="${selected_lang#*|}"; lang_code="${lang_code%%|*}"
+  locale_str="${selected_lang##*|}"
+
+  echo "LANG=$locale_str" | sudo tee /etc/locale.conf > /dev/null
+  echo "export LANG=$locale_str" | sudo tee /etc/profile.d/locale.sh > /dev/null
+
+  # Env que o wrapper do greeter cosmic (cosmic-greeter-start) sourcinga
+  # antes de subir o cosmic-comp: é assim que o idioma escolhido aqui
+  # chega à interface do greeter.
+  sudo mkdir -p /etc/lsd-welcome
+  echo "export LANG=$locale_str" | sudo tee /etc/lsd-welcome/env > /dev/null
+
+  export LANG="$locale_str"
+  
+  apply_translations
+}
+
+setup_keyboard() {
+  select_item "Select your keyboard layout" keyboards 26
+  kb_sel=$SELECTED_IDX
+  selected_kb="${keyboards[$kb_sel]}"
+  xkb_layout="${selected_kb##*|}"
+
+  xkb_l="${xkb_layout%% *}"
+  xkb_v=""
+  [[ "$xkb_layout" == *" "* ]] && xkb_v="${xkb_layout#* }"
+
+  case "$xkb_l" in
+    br) vconsole_l="br-abnt2" ;;
+    pt) vconsole_l="pt-latin1" ;;
+    es) vconsole_l="es-latin1" ;;
+    us) vconsole_l="us" ;;
+    *)  vconsole_l="$xkb_l" ;;
+  esac
+
+  # Layout para o cosmic-comp (greeter e sessão): default "de sistema" do
+  # cosmic-config em /usr/share/cosmic/... O cosmic-comp lê xkb_config com
+  # get() (config do usuário primeiro, system default como fallback), e o
+  # greeter roda sem config de usuário, então recebe este layout. Se
+  # mudarem o layout no cosmic-settings depois, a config por usuário
+  # sobrescreve este default. Formato: RON (cosmic-config usa ron::from_str).
+  sudo mkdir -p /usr/share/cosmic/com.system76.CosmicComp/v1
+  printf '(rules: "", model: "", layout: "%s", variant: "%s", options: None)\n' \
+    "$xkb_l" "$xkb_v" | sudo tee /usr/share/cosmic/com.system76.CosmicComp/v1/xkb_config > /dev/null
+
+  if [ -f /etc/vconsole.conf ]; then
+      if grep -q "^KEYMAP=" /etc/vconsole.conf; then
+          sudo sed -i -E "s/^KEYMAP=.*/KEYMAP=$vconsole_l/" /etc/vconsole.conf
+      else
+          echo "KEYMAP=$vconsole_l" | sudo tee -a /etc/vconsole.conf > /dev/null
+      fi
+  else
+      echo "KEYMAP=$vconsole_l" | sudo tee /etc/vconsole.conf > /dev/null
+  fi
+
+  sudo loadkeys "$vconsole_l" 2>/dev/null || true
+}
+
+setup_timezone() {
+  tz_regions=()
+  while IFS= read -r r; do
+    tz_regions+=("$r")
+  done < <(find /usr/share/zoneinfo -maxdepth 1 -mindepth 1 -type d -printf '%f\n' | grep -vE '^(right|posix)$' | sort)
+
+  select_item "Select your region" tz_regions 22
+  local region="${tz_regions[$SELECTED_IDX]}"
+
+  tz_cities=()
+  while IFS= read -r c; do
+    tz_cities+=("$c")
+  done < <(find "/usr/share/zoneinfo/$region" -maxdepth 1 -type f -printf '%f\n' | sort)
+
+  select_item "Select your city ($region)" tz_cities 26
+  local city="${tz_cities[$SELECTED_IDX]}"
+
+  tz="$region/$city"
+
+  sudo ln -sf "/usr/share/zoneinfo/$tz" /etc/localtime
+  echo "$tz" | sudo tee /etc/timezone > /dev/null
+}
+
+if [ ! -f /tmp/.lsd_welcome_configured ]; then
+  setup_language
+  setup_keyboard
+  setup_timezone
+  touch /tmp/.lsd_welcome_configured
+else
+  if [ -f /etc/locale.conf ]; then
+    current_locale=$(grep "^LANG=" /etc/locale.conf | cut -d= -f2 | tr -d '"')
+    lang_code="${current_locale%%_*}"
+  else
+    lang_code="en"
+  fi
+  apply_translations
+  
+  if [ -f /etc/vconsole.conf ]; then
+    xkb_l=$(grep "^KEYMAP=" /etc/vconsole.conf | cut -d= -f2 | tr -d '"')
+    xkb_v=""
+  else
+    xkb_l="us"
+  fi
+
+  if [ -f /etc/timezone ]; then
+    tz=$(cat /etc/timezone)
+  elif [ -L /etc/localtime ]; then
+    tz=$(readlink -f /etc/localtime | sed 's|.*/zoneinfo/||')
+  else
+    tz="Europe/Paris"
+  fi
+fi
+
+while :; do
+  s=0
+  menu_opt=("$t_l" "$t_c" "$t_cl" "$t_kb" "$t_tz")
+  menu_sub=("$t_ld" "$t_cd" "$t_m" "$t_m" "$t_tzd")
+
+  while :; do
+    printf '\e[H\e[J\e[8;6H\e[1;33m%s\e[0m\n\n\e[6G%s\n\n' "$t_w" "$t_nav"
+
+    for i in 0 1 2 3 4; do
+      if (( i == s )); then
+        printf '\e[6G\e[44;97m > %-26s\e[0m\n' "${menu_opt[$i]}"
+      else
+        printf '\e[6G   %-26s\n' "${menu_opt[$i]}"
+      fi
+      if [ -n "${menu_sub[$i]}" ]; then
+        printf '\e[6G   %s\n\n' "${menu_sub[$i]}"
+      else
+        printf '\n'
+      fi
+    done
+    
+    printf '\e[2;1H%s' "$L"
+    read -rsn3 k
+    case $k in
+      $'\e[A') ((s>0)) && ((s--)) ;;
+      $'\e[B') ((s<4)) && ((s++)) ;;
+      '') break ;;
+    esac
+  done
+
+  case $s in
+    0)
+      # Iniciar ISO live: sai 0 => o serviço dinit completa e o greeter
+      # sobe (cosmic-greeter tem waits-for = lsd-welcome).
+      exit 0
+      ;;
+    1)
+      # Linha de comando: este bash É o processo do serviço; quando ele
+      # terminar (exit), o greeter sobe. "lsd-welcome" reabre este menu.
+      printf '\e[32;1H%s\n\n' "$t_e"
+      printf '\e[?25h\e[0m'
+      exec /bin/bash
+      ;;
+    2)
+      setup_language
+      ;;
+    3)
+      setup_keyboard
+      ;;
+    4)
+      setup_timezone
+      ;;
+  esac
+done
