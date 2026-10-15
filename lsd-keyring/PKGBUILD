@@ -1,0 +1,26 @@
+# Maintainer: Wendel <wende08@proton.me>
+pkgname=lsd-keyring
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Chaves GPG do repositório [lsd] da LSD_OS!"
+arch=('any')
+url="https://github.com/LSD-OS/lsd-keyring"
+license=('GPL3')
+validpgpkeys=()
+source=(
+    'lsd.key'
+    'lsd-trusted'
+    'lsd-revoked'
+)
+sha256sums=(
+    'b6cb21df4481828f27e16036aea7346ee7f8647418fab761f66fb957609f35f1'
+    'ff1eb82ca3daf9cad3e6afd60b0f7acd7f7126b128ccd64fa16813e94c9b100d'
+    'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
+)
+
+package() {
+    install -d -m 0755 "${pkgdir}/usr/share/pacman/keyrings"
+    gpg --dearmor "${srcdir}/lsd.key" > "${pkgdir}/usr/share/pacman/keyrings/lsd.gpg"
+    install -m 0644 "${srcdir}/lsd-trusted" "${pkgdir}/usr/share/pacman/keyrings/lsd-trusted"
+    install -m 0644 "${srcdir}/lsd-revoked" "${pkgdir}/usr/share/pacman/keyrings/lsd-revoked"
+}
