@@ -1,0 +1,20 @@
+# Maintainer: Wendel <wende08@proton.me>
+pkgname=lsd-mirrorlist
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Mirrorlist do repositório [lsd] da LSD_OS!"
+arch=('any')
+url="https://github.com/LSD-OS/packages"
+license=('GPL3')
+backup=('etc/pacman.d/lsd-mirrorlist')
+source=(
+    'lsd-mirrorlist'
+)
+sha256sums=(
+    'SKIP'
+)
+
+package() {
+    install -d -m 0755 "${pkgdir}/etc/pacman.d"
+    install -m 0644 "${srcdir}/lsd-mirrorlist" "${pkgdir}/etc/pacman.d/lsd-mirrorlist"
+}
