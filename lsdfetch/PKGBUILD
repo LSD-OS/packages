@@ -1,16 +1,16 @@
 # Maintainer: Wendel <wende08@proton.me>
 pkgname=lsdfetch
 pkgver=1.0.0
-pkgrel=2
+pkgrel=3
 pkgdesc="Wrapper para fastfetch com tema e logo do LSD-OS"
 arch=('any')
 url="https://github.com/LSD-OS/packages"
 license=('GPL3')
-depends=('bash' 'fastfetch' 'chafa' 'ttf-nerd-fonts-symbols')
+depends=('bash' 'fastfetch' 'ttf-nerd-fonts-symbols')
 source=(
     'lsdfetch'
     'config.jsonc'
-    'lsd.png'
+    'lsd.txt'
 )
 sha256sums=(
     'SKIP'
@@ -23,8 +23,8 @@ package() {
     install -d -m 0755 "${pkgdir}/usr/bin"
     install -m 0755 "${srcdir}/lsdfetch" "${pkgdir}/usr/bin/lsdfetch"
 
-    # Recursos (config e logo png)
+    # Recursos (config e logo txt)
     install -d -m 0755 "${pkgdir}/usr/share/lsdfetch"
     install -m 0644 "${srcdir}/config.jsonc" "${pkgdir}/usr/share/lsdfetch/config.jsonc"
-    install -m 0644 "${srcdir}/lsd.png" "${pkgdir}/usr/share/lsdfetch/lsd.png"
+    install -m 0644 "${srcdir}/lsd.txt" "${pkgdir}/usr/share/lsdfetch/lsd.txt"
 }
