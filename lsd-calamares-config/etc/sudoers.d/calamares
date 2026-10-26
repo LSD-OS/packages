@@ -1,1 +1,1 @@
-ALL ALL=(ALL) NOPASSWD: /usr/bin/calamares
+ALL ALL=(ALL) SETENV: NOPASSWD: /usr/bin/calamares, /usr/bin/lsd-calamares

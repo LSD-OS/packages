@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# LSD_OS Calamares Launcher
+
+# Permitir que root acesse o servidor de display (Xwayland / X11)
+if command -v xhost >/dev/null 2>&1; then
+    xhost +SI:localuser:root >/dev/null 2>&1 || xhost +local:root >/dev/null 2>&1 || true
+fi
+
+# Variáveis para suporte Wayland e Qt6
+if [ -n "$WAYLAND_DISPLAY" ]; then
+    export QT_QPA_PLATFORM="wayland;xcb"
+fi
+
+exec sudo -E /usr/bin/calamares "$@"

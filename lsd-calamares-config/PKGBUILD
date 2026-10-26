@@ -1,17 +1,23 @@
 # Maintainer: LSD_OS Team
 pkgname=lsd-calamares-config
 pkgver=1.0.0
-pkgrel=1
-pkgdesc="Calamares installer configuration for LSD_OS"
+pkgrel=2
+pkgdesc="Calamares installer configuration and launcher for LSD_OS"
 arch=('any')
 license=('GPL3')
-depends=('calamares' 'calamares-extensions')
+depends=('calamares' 'calamares-extensions' 'qt6-wayland' 'xcb-util-cursor')
 backup=('etc/calamares/settings.conf')
 source=()
 
 package() {
     install -d "${pkgdir}/etc"
     cp -dr --no-preserve=ownership "${startdir}/etc/"* "${pkgdir}/etc/"
+
+    install -d "${pkgdir}/usr/bin"
+    install -m 755 "${startdir}/usr/bin/lsd-calamares" "${pkgdir}/usr/bin/lsd-calamares"
+
+    install -d "${pkgdir}/usr/share/applications"
+    install -m 644 "${startdir}/usr/share/applications/lsd-calamares.desktop" "${pkgdir}/usr/share/applications/lsd-calamares.desktop"
 
     chmod 755 "${pkgdir}/etc/calamares"
     chmod 755 "${pkgdir}/etc/calamares/branding"

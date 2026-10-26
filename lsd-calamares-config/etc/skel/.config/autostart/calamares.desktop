@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Install LSD_OS
+GenericName=Live Installer
+Comment=Install LSD_OS to disk
+Exec=/usr/bin/lsd-calamares
+Icon=calamares
+Terminal=false
+StartupNotify=true
+Categories=Qt;System;
