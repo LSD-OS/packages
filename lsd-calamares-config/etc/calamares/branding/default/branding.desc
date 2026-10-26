@@ -1,0 +1,37 @@
+componentName:  default
+welcomeStyleCalamares:   false
+welcomeExpandingLogo:   true
+windowExpanding:    normal
+windowSize: 800px,520px
+windowPlacement: center
+sidebar: widget
+navigation: widget
+
+strings:
+    productName:         LSD_OS
+    shortProductName:    LSD_OS
+    version:             rolling
+    shortVersion:        rolling
+    versionedName:       LSD_OS!
+    shortVersionedName:  LSD_OS!
+    bootloaderEntryName: LSD_OS
+
+images:
+    # productBanner:       "banner.png"
+    productIcon:         "squid.png"
+    productLogo:         "squid.png"
+    # productWallpaper:    "wallpaper.png"
+    productWelcome:      "2-alci.png"
+
+style:
+   sidebarBackground:    "#292F34"
+   sidebarText:          "#FFFFFF"
+   sidebarTextSelect:    "#292F34"
+   sidebarTextHighlight: "#D35400"
+
+slideshow:               "show.qml"
+slideshowAPI: 2
+
+uploadServer :
+    type :    "fiche"
+    url :     "http://termbin.com:9999"
