@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-exec fastfetch --config /usr/share/lsdfetch/config.jsonc --logo /usr/share/lsdfetch/lsd.png --logo-type chafa "$@"
+exec fastfetch --config /usr/share/lsdfetch/config.jsonc "$@"
