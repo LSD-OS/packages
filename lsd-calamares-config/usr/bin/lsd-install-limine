@@ -59,16 +59,28 @@ timeout: 5
 interface_branding: LSD_OS!
 term_font_scale: 1x1
 
-/LSD_OS Linux
+/LSD_OS (Linux CachyOS)
     protocol: linux
-    kernel_path: boot():/vmlinuz-linux
-    module_path: boot():/initramfs-linux.img
+    kernel_path: boot():/vmlinuz-linux-cachyos
+    module_path: boot():/initramfs-linux-cachyos.img
     kernel_cmdline: root=UUID=${ROOT_UUID} rw quiet splash
 
-/LSD_OS Linux (Fallback)
+/LSD_OS (Linux CachyOS - Fallback)
     protocol: linux
-    kernel_path: boot():/vmlinuz-linux
-    module_path: boot():/initramfs-linux-fallback.img
+    kernel_path: boot():/vmlinuz-linux-cachyos
+    module_path: boot():/initramfs-linux-cachyos-fallback.img
+    kernel_cmdline: root=UUID=${ROOT_UUID} rw
+
+/LSD_OS (Linux CachyOS LTS)
+    protocol: linux
+    kernel_path: boot():/vmlinuz-linux-cachyos-lts
+    module_path: boot():/initramfs-linux-cachyos-lts.img
+    kernel_cmdline: root=UUID=${ROOT_UUID} rw quiet splash
+
+/LSD_OS (Linux CachyOS LTS - Fallback)
+    protocol: linux
+    kernel_path: boot():/vmlinuz-linux-cachyos-lts
+    module_path: boot():/initramfs-linux-cachyos-lts-fallback.img
     kernel_cmdline: root=UUID=${ROOT_UUID} rw
 CONF
 
