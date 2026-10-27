@@ -1,7 +1,7 @@
 # Maintainer: LSD_OS Team
 pkgname=lsd-calamares-config
 pkgver=1.0.0
-pkgrel=3
+pkgrel=4
 pkgdesc="Calamares installer configuration and launcher for LSD_OS"
 arch=('any')
 license=('GPL3')
