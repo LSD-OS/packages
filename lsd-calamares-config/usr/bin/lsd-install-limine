@@ -7,18 +7,46 @@ echo "==> Instalando Limine Bootloader (UEFI)..."
 # Identifica UUID da partição raiz recém-instalada
 ROOT_UUID=$(findmnt -n -o UUID / 2>/dev/null || blkid -s UUID -o value $(findmnt -n -o SOURCE / 2>/dev/null) || true)
 
-# Ponto de montagem da partição EFI
-if [ -d "/boot/efi/EFI" ] || [ -d "/boot/efi" ]; then
+# Ponto de montagem da partição EFI (/boot ou /boot/efi)
+if findmnt -n /boot/efi >/dev/null 2>&1 || [ -d "/boot/efi/EFI" ]; then
     ESP_DIR="/boot/efi"
-elif [ -d "/boot/EFI" ]; then
+elif findmnt -n /boot >/dev/null 2>&1 || [ -d "/boot/EFI" ]; then
     ESP_DIR="/boot"
-else
+elif [ -d "/boot/efi" ]; then
     ESP_DIR="/boot/efi"
-    mkdir -p "$ESP_DIR"
+else
+    ESP_DIR="/boot"
 fi
 
 echo "==> Ponto de montagem da partição ESP: $ESP_DIR"
 mkdir -p "$ESP_DIR/EFI/BOOT" "$ESP_DIR/EFI/LSD_OS"
+
+# Se a ESP estiver montada em /boot/efi (separada de /boot), copia kernel, initramfs e microcode para a ESP
+# pois o protocolo UEFI do Limine lê de boot():/ (que é a partição FAT32 da ESP)
+if [ "$ESP_DIR" != "/boot" ]; then
+    echo "==> Sincronizando kernel e initramfs de /boot para $ESP_DIR..."
+    cp -fv /boot/vmlinuz-* "$ESP_DIR/" 2>/dev/null || true
+    cp -fv /boot/initramfs-*.img "$ESP_DIR/" 2>/dev/null || true
+    cp -fv /boot/*-ucode.img "$ESP_DIR/" 2>/dev/null || true
+
+    # Cria hook do pacman para manter o kernel sincronizado na ESP em futuras atualizações
+    mkdir -p /etc/pacman.d/hooks
+    cat << 'HOOK' > /etc/pacman.d/hooks/99-limine-esp-sync.hook
+[Trigger]
+Type = Path
+Operation = Install
+Operation = Upgrade
+Target = usr/lib/modules/*/vmlinuz
+Target = boot/vmlinuz-*
+Target = boot/initramfs-*.img
+Target = boot/*-ucode.img
+
+[Action]
+Description = Sincronizando Kernel e Initramfs com a partição EFI para o Limine...
+When = PostTransaction
+Exec = /bin/sh -c 'cp -f /boot/vmlinuz-* /boot/initramfs-*.img /boot/efi/ 2>/dev/null || true; cp -f /boot/*-ucode.img /boot/efi/ 2>/dev/null || true'
+HOOK
+fi
 
 # Copia os binários UEFI x86_64 do Limine
 cp -fv /usr/share/limine/BOOTX64.EFI "$ESP_DIR/EFI/BOOT/BOOTX64.EFI" 2>/dev/null || true
@@ -44,26 +72,9 @@ term_font_scale: 1x1
     kernel_cmdline: root=UUID=${ROOT_UUID} rw
 CONF
 
-# Se /boot estiver em partição separada da ESP, espelha para /boot/limine.conf
-if [ "$ESP_DIR" != "/boot" ]; then
-    cat << CONF > "/boot/limine.conf"
-timeout: 5
-interface_branding: LSD_OS!
-term_font_scale: 1x1
-
-/LSD_OS Linux
-    protocol: linux
-    kernel_path: boot():/boot/vmlinuz-linux
-    module_path: boot():/boot/initramfs-linux.img
-    kernel_cmdline: root=UUID=${ROOT_UUID} rw quiet splash
-
-/LSD_OS Linux (Fallback)
-    protocol: linux
-    kernel_path: boot():/boot/vmlinuz-linux
-    module_path: boot():/boot/initramfs-linux-fallback.img
-    kernel_cmdline: root=UUID=${ROOT_UUID} rw
-CONF
-fi
+# Também copia para $ESP_DIR/EFI/BOOT/limine.conf e $ESP_DIR/EFI/LSD_OS/limine.conf por garantia
+cp -fv "$ESP_DIR/limine.conf" "$ESP_DIR/EFI/BOOT/limine.conf" 2>/dev/null || true
+cp -fv "$ESP_DIR/limine.conf" "$ESP_DIR/EFI/LSD_OS/limine.conf" 2>/dev/null || true
 
 # Registra a entrada NVRAM no firmware UEFI
 if command -v efibootmgr >/dev/null 2>&1; then
