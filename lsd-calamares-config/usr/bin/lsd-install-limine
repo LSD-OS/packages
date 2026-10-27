@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+# LSD_OS Limine Bootloader Installer for Installed System
+set -e
+
+echo "==> Instalando Limine Bootloader no sistema instalado..."
+
+# Detecta se o sistema destino foi instalado com /boot separado ou em /
+# As variáveis são executadas dentro do chroot pelo Calamares
+ROOT_UUID=$(findmnt -n -o UUID / 2>/dev/null || blkid -s UUID -o value $(findmnt -n -o SOURCE / 2>/dev/null) || true)
+ROOT_FSTYPE=$(findmnt -n -o FSTYPE / 2>/dev/null || echo "ext4")
+
+# Ponto de montagem da partição EFI (pode ser /boot ou /boot/efi)
+if [ -d "/boot/efi/EFI" ] || [ -d "/boot/efi" ]; then
+    ESP_DIR="/boot/efi"
+elif [ -d "/boot/EFI" ]; then
+    ESP_DIR="/boot"
+else
+    ESP_DIR="/boot/efi"
+    mkdir -p "$ESP_DIR"
+fi
+
+echo "==> Ponto de montagem da ESP: $ESP_DIR"
+mkdir -p "$ESP_DIR/EFI/BOOT" "$ESP_DIR/EFI/LSD_OS"
+
+# Copia os binários UEFI do Limine para fallback e para a entrada LSD_OS
+cp -fv /usr/share/limine/BOOTX64.EFI "$ESP_DIR/EFI/BOOT/BOOTX64.EFI" 2>/dev/null || true
+cp -fv /usr/share/limine/BOOTIA32.EFI "$ESP_DIR/EFI/BOOT/BOOTIA32.EFI" 2>/dev/null || true
+cp -fv /usr/share/limine/BOOTX64.EFI "$ESP_DIR/EFI/LSD_OS/BOOTX64.EFI" 2>/dev/null || true
+
+# Configura o limine.conf na partição ESP e em /boot
+cat << CONF > "$ESP_DIR/limine.conf"
+timeout: 5
+interface_branding: LSD_OS!
+term_font_scale: 1x1
+
+/LSD_OS Linux
+    protocol: linux
+    kernel_path: boot():/vmlinuz-linux
+    module_path: boot():/initramfs-linux.img
+    kernel_cmdline: root=UUID=${ROOT_UUID} rw quiet splash
+
+/LSD_OS Linux (Fallback)
+    protocol: linux
+    kernel_path: boot():/vmlinuz-linux
+    module_path: boot():/initramfs-linux-fallback.img
+    kernel_cmdline: root=UUID=${ROOT_UUID} rw
+CONF
+
+# Se /boot for diferente de /boot/efi, cria também a configuração com caminho relativo a /boot
+if [ "$ESP_DIR" != "/boot" ]; then
+    cat << CONF > "/boot/limine.conf"
+timeout: 5
+interface_branding: LSD_OS!
+term_font_scale: 1x1
+
+/LSD_OS Linux
+    protocol: linux
+    kernel_path: boot():/boot/vmlinuz-linux
+    module_path: boot():/boot/initramfs-linux.img
+    kernel_cmdline: root=UUID=${ROOT_UUID} rw quiet splash
+
+/LSD_OS Linux (Fallback)
+    protocol: linux
+    kernel_path: boot():/boot/vmlinuz-linux
+    module_path: boot():/boot/initramfs-linux-fallback.img
+    kernel_cmdline: root=UUID=${ROOT_UUID} rw
+CONF
+fi
+
+# Cria entrada UEFI no NVRAM com efibootmgr se estiver em ambiente UEFI
+if [ -d "/sys/firmware/efi" ] && command -v efibootmgr >/dev/null 2>&1; then
+    ESP_DEV=$(findmnt -n -o SOURCE "$ESP_DIR" 2>/dev/null || true)
+    if [ -n "$ESP_DEV" ]; then
+        DISK=$(lsblk -no PKNAME "$ESP_DEV" 2>/dev/null || true)
+        PARTNUM=$(lsblk -no PARTN "$ESP_DEV" 2>/dev/null || true)
+        if [ -n "$DISK" ] && [ -n "$PARTNUM" ]; then
+            DISK="/dev/$DISK"
+            echo "==> Registrando entrada UEFI no disco $DISK partição $PARTNUM..."
+            efibootmgr -c -d "$DISK" -p "$PARTNUM" -L "LSD_OS (Limine)" -l "\\EFI\\LSD_OS\\BOOTX64.EFI" 2>/dev/null || true
+        fi
+    fi
+fi
+
+# Se houver disco BIOS MBR, instala o MBR do Limine
+ROOT_SRC=$(findmnt -n -o SOURCE / 2>/dev/null || true)
+if [ -n "$ROOT_SRC" ]; then
+    ROOT_DISK="/dev/$(lsblk -no PKNAME "$ROOT_SRC" 2>/dev/null || true)"
+    if [ -b "$ROOT_DISK" ] && command -v limine >/dev/null 2>&1; then
+        echo "==> Gravando suporte BIOS/MBR do Limine em $ROOT_DISK..."
+        limine bios-install "$ROOT_DISK" 2>/dev/null || true
+    fi
+fi
+
+echo "==> Limine Bootloader instalado com sucesso!"
