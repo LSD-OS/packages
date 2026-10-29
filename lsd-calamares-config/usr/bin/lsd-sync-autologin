@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# LSD_OS Greetd / COSMIC Autologin Sync
+set -e
+
+CONFIG_TOML="/etc/greetd/config.toml"
+COSMIC_TOML="/etc/greetd/cosmic-greeter.toml"
+
+# Remove qualquer autologin remanescente do liveuser
+if [ -f "$COSMIC_TOML" ]; then
+    sed -i '/initial_session/,+3d' "$COSMIC_TOML"
+fi
+
+# Se o Calamares configurou initial_session em config.toml, sincroniza para cosmic-greeter.toml
+if [ -f "$CONFIG_TOML" ] && grep -q '^\[initial_session\]' "$CONFIG_TOML"; then
+    AUTOLOGIN_USER=$(grep -A 2 '^\[initial_session\]' "$CONFIG_TOML" | awk -F'=' '/user/ {gsub(/[ "]/, "", $2); print $2}')
+    
+    # Se o usuário não for liveuser e for um usuário válido existente
+    if [ -n "$AUTOLOGIN_USER" ] && [ "$AUTOLOGIN_USER" != "liveuser" ] && id "$AUTOLOGIN_USER" >/dev/null 2>&1; then
+        echo "==> Configurando autologin no COSMIC para o usuário: $AUTOLOGIN_USER"
+        if [ -f "$COSMIC_TOML" ]; then
+            printf '\n[initial_session]\ncommand = "/usr/bin/start-cosmic"\nuser = "%s"\n' "$AUTOLOGIN_USER" >> "$COSMIC_TOML"
+        fi
+    fi
+fi

@@ -1,0 +1,5 @@
+type            = scripted
+command         = /usr/lib/dinit/zram-service start
+stop-command    = /usr/lib/dinit/zram-service stop
+before          = local.target
+depends-on      = early-fs-local.target

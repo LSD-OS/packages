@@ -1,0 +1,50 @@
+#!/bin/sh
+set -e
+
+action="$1"
+
+case "$action" in
+    start)
+        # Verifica se o modulo zram esta carregado
+        modprobe zram 2>/dev/null || true
+
+        # Se ja existir zram0 ativo como swap, sai silenciosamente
+        if grep -q "^/dev/zram0 " /proc/swaps 2>/dev/null; then
+            exit 0
+        fi
+
+        # Define algoritmo de compressao rapido (zstd ou lz4)
+        algo="zstd"
+        if ! grep -q "zstd" /sys/block/zram0/comp_algorithm 2>/dev/null; then
+            algo="lz4"
+        fi
+
+        # Define tamanho do ZRAM como 100% da memoria RAM total
+        ram_total_kb=$(awk '/MemTotal/{print $2}' /proc/meminfo)
+        zram_size_bytes=$(( ram_total_kb * 1024 ))
+
+        # Inicializa o dispositivo zram0
+        zramctl --find --size "${zram_size_bytes}" --algorithm "$algo" >/dev/null 2>&1 || {
+            echo "$algo" > /sys/block/zram0/comp_algorithm 2>/dev/null || true
+            echo "${zram_size_bytes}" > /sys/block/zram0/disksize 2>/dev/null || true
+        }
+
+        # Formata e ativa como swap com prioridade maxima (32767)
+        mkswap /dev/zram0 -L zram0 >/dev/null 2>&1
+        swapon /dev/zram0 -p 32767
+        ;;
+
+    stop)
+        if grep -q "^/dev/zram0 " /proc/swaps 2>/dev/null; then
+            swapoff /dev/zram0 2>/dev/null || true
+        fi
+        zramctl --reset /dev/zram0 2>/dev/null || {
+            echo 1 > /sys/block/zram0/reset 2>/dev/null || true
+        }
+        ;;
+
+    *)
+        echo "Uso: $0 {start|stop}"
+        exit 1
+        ;;
+esac

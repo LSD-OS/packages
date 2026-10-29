@@ -64,6 +64,14 @@ cp -fv /usr/share/limine/BOOTX64.EFI "$ESP_DIR/EFI/BOOT/BOOTX64.EFI" 2>/dev/null
 cp -fv /usr/share/limine/BOOTIA32.EFI "$ESP_DIR/EFI/BOOT/BOOTIA32.EFI" 2>/dev/null || true
 cp -fv /usr/share/limine/BOOTX64.EFI "$ESP_DIR/EFI/LSD_OS/BOOTX64.EFI" 2>/dev/null || true
 
+# Detecta ucode presente (intel ou amd)
+UCODE_ENTRY=""
+if [ -f "$ESP_DIR/intel-ucode.img" ]; then
+    UCODE_ENTRY="    module_path: boot():/intel-ucode.img"
+elif [ -f "$ESP_DIR/amd-ucode.img" ]; then
+    UCODE_ENTRY="    module_path: boot():/amd-ucode.img"
+fi
+
 # Configura o limine.conf na raiz da ESP
 cat << CONF > "$ESP_DIR/limine.conf"
 timeout: 5
@@ -73,24 +81,28 @@ term_font_scale: 1x1
 /LSD_OS (Linux CachyOS)
     protocol: linux
     kernel_path: boot():/vmlinuz-linux-cachyos
+${UCODE_ENTRY}
     module_path: boot():/initramfs-linux-cachyos.img
     kernel_cmdline: root=UUID=${ROOT_UUID} ${ROOT_FLAGS}rw quiet splash
 
 /LSD_OS (Linux CachyOS - Fallback)
     protocol: linux
     kernel_path: boot():/vmlinuz-linux-cachyos
+${UCODE_ENTRY}
     module_path: boot():/initramfs-linux-cachyos-fallback.img
     kernel_cmdline: root=UUID=${ROOT_UUID} ${ROOT_FLAGS}rw
 
 /LSD_OS (Linux CachyOS LTS)
     protocol: linux
     kernel_path: boot():/vmlinuz-linux-cachyos-lts
+${UCODE_ENTRY}
     module_path: boot():/initramfs-linux-cachyos-lts.img
     kernel_cmdline: root=UUID=${ROOT_UUID} ${ROOT_FLAGS}rw quiet splash
 
 /LSD_OS (Linux CachyOS LTS - Fallback)
     protocol: linux
     kernel_path: boot():/vmlinuz-linux-cachyos-lts
+${UCODE_ENTRY}
     module_path: boot():/initramfs-linux-cachyos-lts-fallback.img
     kernel_cmdline: root=UUID=${ROOT_UUID} ${ROOT_FLAGS}rw
 CONF
