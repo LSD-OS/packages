@@ -5,7 +5,18 @@ set -e
 echo "==> Instalando Limine Bootloader (UEFI)..."
 
 # Identifica UUID da partição raiz recém-instalada
-ROOT_UUID=$(findmnt -n -o UUID / 2>/dev/null || blkid -s UUID -o value $(findmnt -n -o SOURCE / 2>/dev/null) || true)
+ROOT_DEV=$(findmnt -n -o SOURCE / 2>/dev/null | sed 's/\[.*\]//' || true)
+ROOT_UUID=$(findmnt -n -o UUID / 2>/dev/null || blkid -s UUID -o value "$ROOT_DEV" 2>/dev/null || true)
+
+# Se a raiz for Btrfs com subvolume (ex: /@ criado pelo Calamares), inclui rootflags=subvol=...
+ROOT_FSTYPE=$(findmnt -n -o FSTYPE / 2>/dev/null || true)
+ROOT_FLAGS=""
+if [ "$ROOT_FSTYPE" = "btrfs" ]; then
+    SUBVOL=$(findmnt -n -o FSROOT / 2>/dev/null || true)
+    if [ -n "$SUBVOL" ] && [ "$SUBVOL" != "/" ]; then
+        ROOT_FLAGS="rootflags=subvol=${SUBVOL} "
+    fi
+fi
 
 # Ponto de montagem da partição EFI (/boot ou /boot/efi)
 if findmnt -n /boot/efi >/dev/null 2>&1 || [ -d "/boot/efi/EFI" ]; then
@@ -63,25 +74,25 @@ term_font_scale: 1x1
     protocol: linux
     kernel_path: boot():/vmlinuz-linux-cachyos
     module_path: boot():/initramfs-linux-cachyos.img
-    kernel_cmdline: root=UUID=${ROOT_UUID} rw quiet splash
+    kernel_cmdline: root=UUID=${ROOT_UUID} ${ROOT_FLAGS}rw quiet splash
 
 /LSD_OS (Linux CachyOS - Fallback)
     protocol: linux
     kernel_path: boot():/vmlinuz-linux-cachyos
     module_path: boot():/initramfs-linux-cachyos-fallback.img
-    kernel_cmdline: root=UUID=${ROOT_UUID} rw
+    kernel_cmdline: root=UUID=${ROOT_UUID} ${ROOT_FLAGS}rw
 
 /LSD_OS (Linux CachyOS LTS)
     protocol: linux
     kernel_path: boot():/vmlinuz-linux-cachyos-lts
     module_path: boot():/initramfs-linux-cachyos-lts.img
-    kernel_cmdline: root=UUID=${ROOT_UUID} rw quiet splash
+    kernel_cmdline: root=UUID=${ROOT_UUID} ${ROOT_FLAGS}rw quiet splash
 
 /LSD_OS (Linux CachyOS LTS - Fallback)
     protocol: linux
     kernel_path: boot():/vmlinuz-linux-cachyos-lts
     module_path: boot():/initramfs-linux-cachyos-lts-fallback.img
-    kernel_cmdline: root=UUID=${ROOT_UUID} rw
+    kernel_cmdline: root=UUID=${ROOT_UUID} ${ROOT_FLAGS}rw
 CONF
 
 # Também copia para $ESP_DIR/EFI/BOOT/limine.conf e $ESP_DIR/EFI/LSD_OS/limine.conf por garantia
