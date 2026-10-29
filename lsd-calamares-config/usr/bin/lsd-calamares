@@ -1,6 +1,32 @@
 #!/usr/bin/env bash
 # LSD_OS Calamares Launcher
 
+# Define modo de instalação (online = atualiza pacotes, offline = pacotes da ISO)
+# usando o resultado do teste do lsd-welcome (ou testando na hora caso o usuário tenha conectado via Wi-Fi no desktop)
+INSTALL_MODE="offline"
+if [ -f /etc/lsd-welcome/install_mode ]; then
+    INSTALL_MODE=$(cat /etc/lsd-welcome/install_mode 2>/dev/null || echo "offline")
+fi
+
+if [ "$INSTALL_MODE" != "online" ]; then
+    if curl -fsI --max-time 3 https://archlinux.org >/dev/null 2>&1 || \
+       ping -c 1 -W 2 1.1.1.1 >/dev/null 2>&1; then
+        INSTALL_MODE="online"
+        sudo mkdir -p /etc/lsd-welcome
+        echo "online" | sudo tee /etc/lsd-welcome/install_mode >/dev/null
+    fi
+fi
+
+if [ -f /etc/calamares/modules/packages.conf ]; then
+    if [ "$INSTALL_MODE" = "online" ]; then
+        sudo sed -i 's/^update_db:.*/update_db: true/' /etc/calamares/modules/packages.conf
+        sudo sed -i 's/^update_system:.*/update_system: true/' /etc/calamares/modules/packages.conf
+    else
+        sudo sed -i 's/^update_db:.*/update_db: false/' /etc/calamares/modules/packages.conf
+        sudo sed -i 's/^update_system:.*/update_system: false/' /etc/calamares/modules/packages.conf
+    fi
+fi
+
 # Permitir que root acesse o servidor de display (Xwayland / X11)
 if command -v xhost >/dev/null 2>&1; then
     xhost +SI:localuser:root >/dev/null 2>&1 || xhost +local:root >/dev/null 2>&1 || true

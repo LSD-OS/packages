@@ -24,6 +24,35 @@ printf '\e%G'
 # para não sujarem a TUI.
 sudo dmesg -n 1 2> /dev/null || true
 
+# Teste de conexão em segundo plano enquanto o usuário configura o ambiente:
+# Define se a instalação pelo Calamares será em modo online (atualizando pacotes)
+# ou offline (usando apenas a imagem local da ISO).
+check_connection_bg() {
+    sudo mkdir -p /etc/lsd-welcome
+    if [ ! -f /etc/lsd-welcome/install_mode ]; then
+        echo "offline" | sudo tee /etc/lsd-welcome/install_mode > /dev/null
+    fi
+    for _ in 1 2 3 4 5; do
+        if curl -fsI --max-time 4 https://archlinux.org >/dev/null 2>&1 || \
+           curl -fsI --max-time 4 https://artixlinux.org >/dev/null 2>&1 || \
+           ping -c 1 -W 3 1.1.1.1 >/dev/null 2>&1; then
+            echo "online" | sudo tee /etc/lsd-welcome/install_mode > /dev/null
+            if [ -f /etc/calamares/modules/packages.conf ]; then
+                sudo sed -i 's/^update_db:.*/update_db: true/' /etc/calamares/modules/packages.conf
+                sudo sed -i 's/^update_system:.*/update_system: true/' /etc/calamares/modules/packages.conf
+            fi
+            return 0
+        fi
+        sleep 2
+    done
+    echo "offline" | sudo tee /etc/lsd-welcome/install_mode > /dev/null
+    if [ -f /etc/calamares/modules/packages.conf ]; then
+        sudo sed -i 's/^update_db:.*/update_db: false/' /etc/calamares/modules/packages.conf
+        sudo sed -i 's/^update_system:.*/update_system: false/' /etc/calamares/modules/packages.conf
+    fi
+}
+check_connection_bg </dev/null >/dev/null 2>&1 &
+
 L=$'\e[999C\e[54D.......             ....  ...  ....
 \e[999C\e[54D.......           ......  ...  ......
 \e[999C\e[54D.......       ......      ...      .....
