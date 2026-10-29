@@ -1,7 +1,7 @@
 # Maintainer: Wendel <wende08@proton.me>
 pkgname=lsdfetch
 pkgver=1.0.0
-pkgrel=3
+pkgrel=4
 pkgdesc="Wrapper para fastfetch com tema e logo do LSD-OS"
 arch=('any')
 url="https://github.com/LSD-OS/packages"
