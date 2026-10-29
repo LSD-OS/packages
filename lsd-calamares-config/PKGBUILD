@@ -1,7 +1,7 @@
 # Maintainer: LSD_OS Team
 pkgname=lsd-calamares-config
 pkgver=1.0.0
-pkgrel=18
+pkgrel=19
 pkgdesc="Calamares installer configuration and launcher for LSD_OS"
 arch=('any')
 license=('GPL3')
@@ -17,12 +17,6 @@ package() {
     install -m 755 "${startdir}/usr/bin/lsd-calamares" "${pkgdir}/usr/bin/lsd-calamares"
     install -m 755 "${startdir}/usr/bin/lsd-install-limine" "${pkgdir}/usr/bin/lsd-install-limine"
     install -m 755 "${startdir}/usr/bin/lsd-sync-autologin" "${pkgdir}/usr/bin/lsd-sync-autologin"
-
-    if [ -d "${startdir}/usr/lib" ]; then
-        install -d "${pkgdir}/usr/lib"
-        cp -dr --no-preserve=ownership "${startdir}/usr/lib/"* "${pkgdir}/usr/lib/"
-        chmod 755 "${pkgdir}/usr/lib/dinit/zram-service" 2>/dev/null || true
-    fi
 
     install -d "${pkgdir}/usr/share/applications"
     install -m 644 "${startdir}/usr/share/applications/lsd-calamares.desktop" "${pkgdir}/usr/share/applications/lsd-calamares.desktop"
