@@ -5,8 +5,9 @@ set -e
 CONFIG_TOML="/etc/greetd/config.toml"
 COSMIC_TOML="/etc/greetd/cosmic-greeter.toml"
 
-# Remove qualquer autologin remanescente do liveuser
+# Remove qualquer autologin remanescente (inclusive do liveuser)
 if [ -f "$COSMIC_TOML" ]; then
+    sed -i '/^\[initial_session\]/,/^$/d' "$COSMIC_TOML"
     sed -i '/initial_session/,+3d' "$COSMIC_TOML"
 fi
 

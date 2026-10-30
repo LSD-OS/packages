@@ -1,7 +1,7 @@
 # Maintainer: Wendel <wende08@proton.me>
 pkgname=cosmic-greeter-dinit
 pkgver=1.0.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Serviços dinit para o cosmic-greeter (greetd com o greeter COSMIC e daemon D-Bus)"
 arch=('any')
 url="https://github.com/pop-os/cosmic-greeter"
