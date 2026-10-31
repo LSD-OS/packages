@@ -1,0 +1,249 @@
+- name: "LSD_OS!"
+  description: "Essential base system and utilities included in LSD_OS!"
+  selected: true
+  critical: false
+  packages:
+    - name: lsd-core
+      description: "Core system, kernel, bootloader, network and base dinit services"
+    - name: lsdfetch
+      description: "System information fetcher with LSD_OS! theme"
+    - name: micro
+      description: "Modern and intuitive terminal-based text editor"
+    - name: nano
+      description: "Simple terminal text editor"
+    - name: tree
+      description: "Directory listing program displaying a depth indented list of files"
+    - name: 7zip
+      description: "File archiver with high compression ratio"
+    - name: rsync
+      description: "Fast and versatile file copying tool"
+    - name: pv
+      description: "Terminal-based tool for monitoring the progress of data through a pipeline"
+    - name: mesa
+      description: "Open-source OpenGL and Vulkan graphics drivers"
+    - name: vulkan-intel
+      description: "Open-source Vulkan driver for Intel GPUs"
+    - name: intel-media-driver
+      description: "Intel Media Driver for VAAPI hardware acceleration"
+    - name: libva-utils
+      description: "Intel VA-API media utilities and vainfo"
+
+- name: "COSMIC"
+  description: "COSMIC Desktop Environment and default applications"
+  selected: true
+  critical: false
+  packages:
+    - name: cosmic
+      description: "COSMIC Desktop Environment core session and components"
+    - name: cosmic-greeter-dinit
+      description: "COSMIC display manager and dinit service"
+    - name: cosmic-terminal
+      description: "COSMIC terminal emulator"
+    - name: cosmic-text-editor
+      description: "COSMIC text editor"
+    - name: cosmic-monitor
+      description: "COSMIC system monitor"
+    - name: cosmic-player
+      description: "COSMIC media player"
+    - name: cosmic-wallpapers
+      description: "COSMIC desktop wallpapers"
+    - name: dconf
+      description: "Configuration database system required by desktop applications"
+
+- name: "Web Browsers"
+  description: "Choose one or more web browsers"
+  selected: false
+  critical: false
+  packages:
+    - name: brave-bin
+      description: "Brave Browser - Fast, privacy-oriented web browser"
+      selected: true
+    - name: chromium
+      description: "Chromium - Open-source web browser from Google"
+    - name: google-chrome
+      description: "Google Chrome - Official Google web browser"
+    - name: vivaldi
+      description: "Vivaldi - Feature-rich customizable web browser"
+    - name: zen-browser-bin
+      description: "Zen Browser - Privacy-focused Firefox fork with modern UI"
+    - name: floorp
+      description: "Floorp - Customizable privacy-oriented browser based on Firefox"
+  subgroups:
+    - name: "Mozilla Firefox"
+      description: "Firefox web browser with dynamic language pack support"
+      selected: false
+      packages:
+        - firefox
+        - firefox-i18n-$LOCALE
+
+- name: "Development"
+  description: "Base development tools, IDEs, code editors and AI assistants"
+  selected: false
+  critical: false
+  packages:
+    - name: base-devel
+      description: "Basic tools to build Arch Linux packages (gcc, make, binutils, etc.)"
+  subgroups:
+    - name: "AI Tools"
+      description: "AI-first editors and autonomous coding assistants"
+      selected: false
+      packages:
+        - name: zed
+          description: "Zed - High-performance multiplayer code editor with built-in AI"
+        - name: claude-code
+          description: "Claude Code - Anthropic autonomous agentic coding tool for terminal"
+        - name: github-copilot-cli
+          description: "GitHub Copilot CLI - Official GitHub Copilot command-line assistant"
+        - name: opencode-desktop-bin
+          description: "OpenCode Desktop - Open-source desktop AI coding interface"
+
+    - name: "Visual Studio Code"
+      description: "Visual Studio Code and open-source distributions"
+      selected: false
+      packages:
+        - name: visual-studio-code-bin
+          description: "Visual Studio Code - Official Microsoft build"
+        - name: code
+          description: "Code - OSS - Official Arch Linux open-source build"
+        - name: vscodium
+          description: "VSCodium - Telemetry-free open-source binaries of VS Code"
+
+    - name: "JetBrains"
+      description: "JetBrains integrated development environments"
+      selected: false
+      packages:
+        - name: intellij-idea-oss
+          description: "IntelliJ IDEA Community - Java and Kotlin IDE"
+        - name: pycharm-community-edition
+          description: "PyCharm Community - Python IDE"
+        - name: android-studio
+          description: "Android Studio - Official Android development environment"
+
+    - name: "Dedicated IDEs"
+      description: "Integrated development environments for specific languages"
+      selected: false
+      packages:
+        - name: qtcreator
+          description: "Qt Creator - C++ and Qt GUI application IDE"
+        - name: kdevelop
+          description: "KDevelop - C, C++, Python and PHP IDE"
+        - name: codeblocks
+          description: "Code::Blocks - Lightweight C/C++ IDE"
+        - name: geany
+          description: "Geany - Fast and lightweight GTK IDE"
+
+    - name: "Advanced Text Editors"
+      description: "Terminal and graphical modal code editors"
+      selected: false
+      packages:
+        - name: neovim
+          description: "Neovim - Vim-fork focused on extensibility and Lua plugins"
+        - name: helix
+          description: "Helix - Post-modern modal editor written in Rust with built-in LSP"
+        - name: emacs
+          description: "GNU Emacs - Extensible, customizable Lisp text editor"
+        - name: sublime-text-4
+          description: "Sublime Text 4 - Sophisticated text editor for code and markup"
+
+- name: "Gaming"
+  description: "Game launchers, Wine compatibility layer and performance tools"
+  selected: false
+  critical: false
+  subgroups:
+    - name: "Launchers"
+      description: "Digital distribution platforms and game managers"
+      selected: false
+      packages:
+        - name: steam
+          description: "Steam - Valve digital gaming platform with Proton support"
+        - name: lutris
+          description: "Lutris - Open gaming platform for Linux"
+        - name: heroic-games-launcher-bin
+          description: "Heroic Games Launcher - Epic Games, GOG and Amazon Prime launcher"
+        - name: bottles
+          description: "Bottles - Manage Wine prefixes easily for Windows games and software"
+        - name: prismlauncher
+          description: "Prism Launcher - Custom Minecraft launcher with modpack support"
+
+    - name: "Wine Compatibility"
+      description: "Wine staging and core runtime components"
+      selected: false
+      packages:
+        - wine-staging
+        - wine-mono
+        - wine-gecko
+        - winetricks
+
+    - name: "Performance Tools"
+      description: "Performance overlays, compositor and game optimizers"
+      selected: false
+      packages:
+        - name: mangohud
+          description: "MangoHud - Vulkan and OpenGL overlay for FPS and hardware monitoring"
+        - name: goverlay
+          description: "GOverlay - Graphical interface to configure MangoHud and overlays"
+        - name: gamescope
+          description: "GameScope - Valve micro-compositor for resolution scaling and FSR"
+        - name: protonup-qt
+          description: "ProtonUp-Qt - Graphical manager for GE-Proton and Wine-GE"
+      subgroups:
+        - name: "GameMode"
+          description: "System performance optimizer daemon and 32-bit libraries"
+          selected: false
+          packages:
+            - gamemode
+            - lib32-gamemode
+
+- name: "Bluetooth"
+  description: "Bluetooth protocol stack, dinit service and graphical manager"
+  selected: false
+  critical: false
+  packages:
+    - name: bluez
+      description: "Daemons for the official Linux Bluetooth protocol stack"
+    - name: bluez-dinit
+      description: "dinit service scripts for bluez"
+    - name: bluez-utils
+      description: "Development and debugging utilities for the Bluetooth protocol stack"
+    - name: bluez-libs
+      description: "Deprecated libraries for the Bluetooth protocol stack"
+    - name: bluez-hid2hci
+      description: "Put HID proxying bluetooth HCI's into HCI mode"
+    - name: bluez-obex
+      description: "Object Exchange daemon for sharing content via Bluetooth"
+    - name: blueman
+      description: "GTK+ Bluetooth Manager graphical interface"
+
+- name: "Printers"
+  description: "CUPS printing system, drivers and HP printer/scanner support"
+  selected: false
+  critical: false
+  packages:
+    - name: cups
+      description: "OpenPrinting CUPS daemon and printing system"
+    - name: cups-dinit
+      description: "dinit service scripts for CUPS"
+    - name: cups-filters
+      description: "OpenPrinting CUPS filters"
+    - name: cups-pdf
+      description: "PDF printer for CUPS"
+    - name: system-config-printer
+      description: "Graphical printer configuration tool and status applet"
+    - name: gutenprint
+      description: "Top quality printer drivers for POSIX systems"
+    - name: foomatic-db
+      description: "Foomatic - XML-based database of printers and drivers"
+    - name: foomatic-db-engine
+      description: "Foomatic - database engine for generating PPD files"
+    - name: foomatic-db-gutenprint-ppds
+      description: "Foomatic - simplified prebuilt PPD files for Gutenprint"
+    - name: foomatic-db-nonfree
+      description: "Foomatic - database extension consisting of manufacturer-supplied PPDs"
+  subgroups:
+    - name: "Support for HP Printer/Scanner"
+      description: "Extra drivers and packages for HP printers and scanners (HPLIP)"
+      selected: false
+      packages:
+        - hplip
+        - python-pyqt5
+        - python-reportlab

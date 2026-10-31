@@ -1,0 +1,73 @@
+# Maintainer: Wendel <wende08@proton.me>
+pkgname=lsd-core
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Metapacote com os pacotes essenciais do sistema base da LSD_OS!"
+arch=('any')
+url="https://github.com/LSD-OS/packages"
+license=('GPL3')
+depends=(
+    # Core & Kernel
+    'base'
+    'mkinitcpio'
+    'linux-firmware'
+    'intel-ucode'
+    'amd-ucode'
+    'linux-cachyos'
+    'linux-cachyos-headers'
+    'linux-cachyos-lts'
+    'linux-cachyos-lts-headers'
+    'dinit'
+    'udev'
+    'elogind'
+    'sudo'
+    'bash'
+    'dash'
+    'less'
+    'logrotate'
+    'iptables'
+    'inetutils'
+    'openssh'
+    'diffutils'
+    'usbutils'
+    'sysfsutils'
+    'device-mapper'
+    'lsb-release'
+    'xdg-user-dirs'
+
+    # Filesystems & Bootloader
+    'dosfstools'
+    'e2fsprogs'
+    'exfatprogs'
+    'f2fs-tools'
+    'jfsutils'
+    'ntfs-3g'
+    'btrfs-progs'
+    'xfsprogs'
+    'efibootmgr'
+    'limine'
+    'os-prober'
+
+    # Keyrings & Mirrorlists
+    'lsd-keyring'
+    'lsd-mirrorlist'
+    'archlinux-keyring'
+    'archlinux-mirrorlist'
+    'artix-keyring'
+    'artix-mirrorlist'
+    'chaotic-keyring'
+    'chaotic-mirrorlist'
+
+    # Core Dinit Services
+    'dinit-base'
+    'dbus-dinit'
+    'elogind-dinit'
+    'chrony-dinit'
+    'networkmanager-dinit'
+    'openssh-dinit'
+    'cryptsetup-dinit'
+)
+
+package() {
+    true
+}

@@ -1,7 +1,7 @@
 # Maintainer: LSD_OS Team
 pkgname=lsd-calamares-config
 pkgver=1.0.0
-pkgrel=22
+pkgrel=23
 pkgdesc="Calamares installer configuration and launcher for LSD_OS"
 arch=('any')
 license=('GPL3')
@@ -25,6 +25,7 @@ package() {
     chmod 755 "${pkgdir}/etc/calamares/branding"
     chmod 755 "${pkgdir}/etc/calamares/branding/default"
     chmod 755 "${pkgdir}/etc/calamares/modules"
+    chmod 755 "${pkgdir}/etc/calamares/modules/lsdoptional"
     chmod 755 "${pkgdir}/etc/xdg"
     chmod 755 "${pkgdir}/etc/xdg/autostart"
     chmod 750 "${pkgdir}/etc/sudoers.d"

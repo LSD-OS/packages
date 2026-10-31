@@ -1,0 +1,5 @@
+---
+type:       "job"
+name:       "lsdoptional"
+interface:  "python"
+script:     "main.py"

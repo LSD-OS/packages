@@ -1,0 +1,249 @@
+- name: "LSD_OS!"
+  description: "Sistema base essencial e utilitários incluídos no LSD_OS!"
+  selected: true
+  critical: false
+  packages:
+    - name: lsd-core
+      description: "Sistema base essencial, kernel, bootloader, rede e serviços dinit fundamentais"
+    - name: lsdfetch
+      description: "Exibidor de informações do sistema com tema e logo do LSD_OS!"
+    - name: micro
+      description: "Editor de texto moderno e intuitivo para terminal"
+    - name: nano
+      description: "Editor de texto simples para terminal"
+    - name: tree
+      description: "Utilitário de listagem de diretórios em formato de árvore"
+    - name: 7zip
+      description: "Compactador e descompactador de arquivos com alta taxa de compressão"
+    - name: rsync
+      description: "Ferramenta rápida e versátil para sincronização e cópia de arquivos"
+    - name: pv
+      description: "Monitor de progresso de dados através de pipelines no terminal"
+    - name: mesa
+      description: "Drivers gráficos open-source OpenGL e Vulkan"
+    - name: vulkan-intel
+      description: "Driver Vulkan open-source para GPUs Intel"
+    - name: intel-media-driver
+      description: "Driver Intel Media para aceleração de vídeo por hardware (VAAPI)"
+    - name: libva-utils
+      description: "Utilitários de mídia Intel VA-API e vainfo"
+
+- name: "COSMIC"
+  description: "Ambiente de trabalho COSMIC e aplicativos padrão"
+  selected: true
+  critical: false
+  packages:
+    - name: cosmic
+      description: "Sessão principal e componentes do ambiente desktop COSMIC"
+    - name: cosmic-greeter-dinit
+      description: "Gerenciador de login do COSMIC e serviço dinit"
+    - name: cosmic-terminal
+      description: "Emulador de terminal do COSMIC"
+    - name: cosmic-text-editor
+      description: "Editor de texto do COSMIC"
+    - name: cosmic-monitor
+      description: "Monitor de sistema do COSMIC"
+    - name: cosmic-player
+      description: "Reprodutor de mídia do COSMIC"
+    - name: cosmic-wallpapers
+      description: "Papéis de parede oficiais do COSMIC"
+    - name: dconf
+      description: "Sistema de banco de dados de configurações para aplicativos gráficos"
+
+- name: "Navegadores Web"
+  description: "Escolha um ou mais navegadores de internet"
+  selected: false
+  critical: false
+  packages:
+    - name: brave-bin
+      description: "Brave Browser - Navegador rápido com foco em privacidade e bloqueio de anúncios"
+      selected: true
+    - name: chromium
+      description: "Chromium - Navegador de código aberto que serve de base para o Google Chrome"
+    - name: google-chrome
+      description: "Google Chrome - Navegador web oficial do Google"
+    - name: vivaldi
+      description: "Vivaldi - Navegador altamente personalizável e repleto de recursos"
+    - name: zen-browser-bin
+      description: "Zen Browser - Navegador moderno focado em privacidade baseado no Firefox"
+    - name: floorp
+      description: "Floorp - Navegador japonês altamente customizável baseado no Firefox"
+  subgroups:
+    - name: "Mozilla Firefox"
+      description: "Navegador Mozilla Firefox com pacote de tradução dinâmico para o seu idioma"
+      selected: false
+      packages:
+        - firefox
+        - firefox-i18n-$LOCALE
+
+- name: "Desenvolvimento"
+  description: "Ferramentas base de compilação, IDEs, editores de código e assistentes de IA"
+  selected: false
+  critical: false
+  packages:
+    - name: base-devel
+      description: "Conjunto de ferramentas fundamentais para compilação (gcc, make, binutils, etc.)"
+  subgroups:
+    - name: "Ferramentas de IA"
+      description: "Editores focados em Inteligência Artificial e assistentes de programação"
+      selected: false
+      packages:
+        - name: zed
+          description: "Zed - Editor de código em Rust de alta performance com IA nativa integrada"
+        - name: claude-code
+          description: "Claude Code - Agente autônomo de codificação da Anthropic para o terminal"
+        - name: github-copilot-cli
+          description: "GitHub Copilot CLI - Assistente oficial do GitHub Copilot para linha de comando"
+        - name: opencode-desktop-bin
+          description: "OpenCode Desktop - Interface desktop open-source para programação com IA"
+
+    - name: "Visual Studio Code"
+      description: "Visual Studio Code e distribuições de código aberto"
+      selected: false
+      packages:
+        - name: visual-studio-code-bin
+          description: "Visual Studio Code - Versão oficial da Microsoft com marketplace completo"
+        - name: code
+          description: "Code - OSS - Compilação oficial de código aberto mantida pelo Arch Linux"
+        - name: vscodium
+          description: "VSCodium - Binários de código aberto do VS Code livres de telemetria"
+
+    - name: "JetBrains"
+      description: "Ambientes de desenvolvimento integrados da JetBrains"
+      selected: false
+      packages:
+        - name: intellij-idea-oss
+          description: "IntelliJ IDEA Community - IDE para Java, Kotlin e ecossistema JVM"
+        - name: pycharm-community-edition
+          description: "PyCharm Community - IDE dedicada ao desenvolvimento em Python"
+        - name: android-studio
+          description: "Android Studio - Ambiente oficial para desenvolvimento Android"
+
+    - name: "IDEs Dedicadas"
+      description: "Ambientes de desenvolvimento integrados para linguagens específicas"
+      selected: false
+      packages:
+        - name: qtcreator
+          description: "Qt Creator - IDE multiplataforma para C++ e interfaces gráficas Qt"
+        - name: kdevelop
+          description: "KDevelop - Poderosa IDE para C, C++, Python e PHP"
+        - name: codeblocks
+          description: "Code::Blocks - IDE leve e extensível para C e C++"
+        - name: geany
+          description: "Geany - IDE e editor de texto rápido e leve em GTK"
+
+    - name: "Editores de Texto Avançados"
+      description: "Editores de código modais e gráficos de alto desempenho"
+      selected: false
+      packages:
+        - name: neovim
+          description: "Neovim - Evolução do Vim focada em extensibilidade e plugins em Lua"
+        - name: helix
+          description: "Helix - Editor modal moderno em Rust com suporte LSP integrado de fábrica"
+        - name: emacs
+          description: "GNU Emacs - Editor de texto extensível e altamente customizável em Lisp"
+        - name: sublime-text-4
+          description: "Sublime Text 4 - Editor sofisticado e veloz para código e marcação"
+
+- name: "Jogos"
+  description: "Lançadores de jogos, camada de compatibilidade Wine e ferramentas de desempenho"
+  selected: false
+  critical: false
+  subgroups:
+    - name: "Lançadores de Jogos"
+      description: "Plataformas digitais e gerenciadores de bibliotecas de jogos"
+      selected: false
+      packages:
+        - name: steam
+          description: "Steam - Plataforma oficial de jogos da Valve com suporte ao Proton"
+        - name: lutris
+          description: "Lutris - Plataforma aberta de gerenciamento de jogos para Linux"
+        - name: heroic-games-launcher-bin
+          description: "Heroic Games Launcher - Lançador para Epic Games, GOG e Amazon Prime"
+        - name: bottles
+          description: "Bottles - Gerenciador prático de prefixos Wine para jogos e aplicativos Windows"
+        - name: prismlauncher
+          description: "Prism Launcher - Lançador customizável para Minecraft com suporte a instâncias e mods"
+
+    - name: "Compatibilidade Wine"
+      description: "Camada de execução Wine Staging e componentes essenciais para aplicativos Windows"
+      selected: false
+      packages:
+        - wine-staging
+        - wine-mono
+        - wine-gecko
+        - winetricks
+
+    - name: "Ferramentas de Desempenho"
+      description: "Overlays de monitoramento, micro-compositor e otimizadores de performance"
+      selected: false
+      packages:
+        - name: mangohud
+          description: "MangoHud - Overlay Vulkan e OpenGL para monitoramento de FPS e temperaturas"
+        - name: goverlay
+          description: "GOverlay - Interface gráfica para configurar o MangoHud e outros overlays"
+        - name: gamescope
+          description: "GameScope - Micro-compositor da Valve para controle de resolução, FSR e HDR"
+        - name: protonup-qt
+          description: "ProtonUp-Qt - Gerenciador gráfico para instalar e atualizar GE-Proton e Wine-GE"
+      subgroups:
+        - name: "GameMode"
+          description: "Otimizador automático de desempenho do sistema para jogos (64 e 32 bits)"
+          selected: false
+          packages:
+            - gamemode
+            - lib32-gamemode
+
+- name: "Bluetooth"
+  description: "Pilha de protocolos Bluetooth, serviço dinit e gerenciador gráfico"
+  selected: false
+  critical: false
+  packages:
+    - name: bluez
+      description: "Daemons oficiais da pilha de protocolos Bluetooth para Linux"
+    - name: bluez-dinit
+      description: "Scripts de serviço dinit para o Bluetooth (bluez)"
+    - name: bluez-utils
+      description: "Utilitários de controle e gerenciamento para Bluetooth (bluetoothctl)"
+    - name: bluez-libs
+      description: "Bibliotecas para integração com a pilha de protocolos Bluetooth"
+    - name: bluez-hid2hci
+      description: "Utilitário para alternar adaptadores Bluetooth HID proxy para modo HCI"
+    - name: bluez-obex
+      description: "Daemon Object Exchange (OBEX) para transferência de arquivos via Bluetooth"
+    - name: blueman
+      description: "Gerenciador gráfico completo de conexões Bluetooth em GTK+"
+
+- name: "Impressoras"
+  description: "Sistema de impressão CUPS, drivers universais e suporte para impressoras/scanners HP"
+  selected: false
+  critical: false
+  packages:
+    - name: cups
+      description: "Daemon e sistema de impressão OpenPrinting CUPS"
+    - name: cups-dinit
+      description: "Scripts de serviço dinit para o sistema de impressão CUPS"
+    - name: cups-filters
+      description: "Filtros e backends de conversão para o OpenPrinting CUPS"
+    - name: cups-pdf
+      description: "Impressora virtual para exportação direta em PDF via CUPS"
+    - name: system-config-printer
+      description: "Ferramenta gráfica para configuração e gerenciamento de impressoras"
+    - name: gutenprint
+      description: "Drivers de alta qualidade para diversas marcas de impressoras"
+    - name: foomatic-db
+      description: "Foomatic - Banco de dados XML de impressoras e drivers compatíveis"
+    - name: foomatic-db-engine
+      description: "Foomatic - Motor gerador de arquivos PPD para impressoras"
+    - name: foomatic-db-gutenprint-ppds
+      description: "Foomatic - Arquivos PPD pré-compilados para drivers Gutenprint"
+    - name: foomatic-db-nonfree
+      description: "Foomatic - Extensão de banco de dados com PPDs fornecidos pelos fabricantes"
+  subgroups:
+    - name: "Suporte para Impressoras e Scanners HP"
+      description: "Drivers e pacotes extras para impressoras e multifuncionais HP (HPLIP)"
+      selected: false
+      packages:
+        - hplip
+        - python-pyqt5
+        - python-reportlab

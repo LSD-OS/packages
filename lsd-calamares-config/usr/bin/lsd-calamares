@@ -15,9 +15,34 @@ if [ "$INSTALL_MODE" != "online" ]; then
     fi
 fi
 
-# Chaveamento limpo e declarativo via arquivos prontos (padrão CachyOS):
-#   online  -> settings_online.conf  (welcome_online com trava de internet, netinstall, packages@online)
-#   offline -> settings_offline.conf (welcome sem trava de rede, sem netinstall, packages@offline)
+# Carrega o idioma configurado pelo usuário no lsd-welcome ou /etc/locale.conf
+if [ -f /etc/lsd-welcome/env ]; then
+    # shellcheck disable=SC1091
+    . /etc/lsd-welcome/env
+elif [ -f /etc/locale.conf ]; then
+    # shellcheck disable=SC1091
+    . /etc/locale.conf
+    export LANG
+fi
+
+# Seleciona o catálogo netinstall traduzido de acordo com o idioma do sistema
+LOCALE_CODE="${LANG%%.*}"
+case "$LOCALE_CODE" in
+    pt_BR|pt_PT|pt)
+        if [ -f /etc/calamares/modules/netinstall-pt_BR.yaml ]; then
+            sudo cp -f /etc/calamares/modules/netinstall-pt_BR.yaml /etc/calamares/modules/netinstall.yaml
+        fi
+        ;;
+    *)
+        if [ -f /etc/calamares/modules/netinstall-en.yaml ]; then
+            sudo cp -f /etc/calamares/modules/netinstall-en.yaml /etc/calamares/modules/netinstall.yaml
+        fi
+        ;;
+esac
+
+# Chaveamento limpo e declarativo via arquivos prontos:
+#   online  -> settings_online.conf  (welcome_online, netinstall, packages@online, lsdoptional)
+#   offline -> settings_offline.conf (welcome, sem netinstall, packages@offline)
 if [ "$INSTALL_MODE" = "online" ]; then
     if [ -f /etc/calamares/settings_online.conf ]; then
         sudo cp -f /etc/calamares/settings_online.conf /etc/calamares/settings.conf
