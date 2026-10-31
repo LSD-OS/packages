@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 # LSD_OS Calamares Launcher
 
-# Define modo de instalação (online = atualiza pacotes, offline = pacotes da ISO)
-# usando o resultado do teste do lsd-welcome (ou testando na hora caso o usuário tenha conectado via Wi-Fi no desktop)
 INSTALL_MODE="offline"
 if [ -f /etc/lsd-welcome/install_mode ]; then
     INSTALL_MODE=$(cat /etc/lsd-welcome/install_mode 2>/dev/null || echo "offline")
@@ -17,13 +15,16 @@ if [ "$INSTALL_MODE" != "online" ]; then
     fi
 fi
 
-if [ -f /etc/calamares/modules/packages.conf ]; then
-    if [ "$INSTALL_MODE" = "online" ]; then
-        sudo sed -i 's/^update_db:.*/update_db: true/' /etc/calamares/modules/packages.conf
-        sudo sed -i 's/^update_system:.*/update_system: true/' /etc/calamares/modules/packages.conf
-    else
-        sudo sed -i 's/^update_db:.*/update_db: false/' /etc/calamares/modules/packages.conf
-        sudo sed -i 's/^update_system:.*/update_system: false/' /etc/calamares/modules/packages.conf
+# Chaveamento limpo e declarativo via arquivos prontos (padrão CachyOS):
+#   online  -> settings_online.conf  (welcome_online com trava de internet, netinstall, packages@online)
+#   offline -> settings_offline.conf (welcome sem trava de rede, sem netinstall, packages@offline)
+if [ "$INSTALL_MODE" = "online" ]; then
+    if [ -f /etc/calamares/settings_online.conf ]; then
+        sudo cp -f /etc/calamares/settings_online.conf /etc/calamares/settings.conf
+    fi
+else
+    if [ -f /etc/calamares/settings_offline.conf ]; then
+        sudo cp -f /etc/calamares/settings_offline.conf /etc/calamares/settings.conf
     fi
 fi
 

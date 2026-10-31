@@ -1,0 +1,484 @@
+- name: "Web Browsers"
+  description: "Choose one or more web browsers"
+  description[pt_BR]: "Escolha um ou mais navegadores web"
+  description[pt]: "Escolha um ou mais navegadores web"
+  description[es]: "Elija uno o más navegadores web"
+  description[fr]: "Choisissez un ou plusieurs navigateurs web"
+  description[de]: "Wählen Sie einen oder mehrere Webbrowser"
+  description[it]: "Scegli uno o più browser web"
+  selected: false
+  critical: false
+  subgroups:
+    - name: "Brave Browser"
+      description: "Fast, privacy-oriented web browser"
+      description[pt_BR]: "Navegador veloz com foco em privacidade"
+      description[pt]: "Navegador veloz com foco em privacidade"
+      description[es]: "Navegador rápido orientado a la privacidad"
+      description[fr]: "Navigateur rapide axé sur la vie privée"
+      description[de]: "Schneller, datenschutzorientierter Webbrowser"
+      description[it]: "Browser veloce orientato alla privacy"
+      selected: false
+      packages:
+        - brave-bin
+    - name: "Mozilla Firefox"
+      description: "Firefox with dynamic language package support"
+      description[pt_BR]: "Firefox com pacote de tradução dinâmico para o seu idioma"
+      description[pt]: "Firefox com pacote de tradução dinâmico para o seu idioma"
+      description[es]: "Firefox con soporte dinámico de idioma"
+      description[fr]: "Firefox avec paquet de langue dynamique"
+      description[de]: "Firefox mit dynamischem Sprachpaket"
+      description[it]: "Firefox con supporto dinamico per la lingua"
+      selected: false
+      packages:
+        - firefox
+        - firefox-i18n-$LOCALE
+    - name: "Chromium"
+      description: "Open-source web browser from Google"
+      description[pt_BR]: "Navegador de código aberto base do Chrome"
+      description[pt]: "Navegador de código aberto base do Chrome"
+      description[es]: "Navegador web de código abierto"
+      description[fr]: "Navigateur web open-source"
+      description[de]: "Open-Source-Webbrowser"
+      description[it]: "Browser web open source"
+      selected: false
+      packages:
+        - chromium
+    - name: "Google Chrome"
+      description: "Official Google web browser"
+      description[pt_BR]: "Navegador oficial do Google"
+      description[pt]: "Navegador oficial do Google"
+      description[es]: "Navegador oficial de Google"
+      description[fr]: "Navigateur officiel de Google"
+      description[de]: "Offizieller Google-Webbrowser"
+      description[it]: "Browser web ufficiale di Google"
+      selected: false
+      packages:
+        - google-chrome
+    - name: "Vivaldi"
+      description: "Feature-rich customizable web browser"
+      description[pt_BR]: "Navegador altamente customizável e repleto de recursos"
+      description[pt]: "Navegador altamente customizável e repleto de recursos"
+      description[es]: "Navegador altamente personalizable"
+      description[fr]: "Navigateur hautement personnalisable"
+      description[de]: "Umfangreicher, anpassbarer Webbrowser"
+      description[it]: "Browser altamente personalizzabile"
+      selected: false
+      packages:
+        - vivaldi
+    - name: "Zen Browser"
+      description: "Privacy-focused Firefox fork with modern UI"
+      description[pt_BR]: "Navegador moderno focado em privacidade baseado no Firefox"
+      description[pt]: "Navegador moderno focado em privacidade baseado no Firefox"
+      description[es]: "Navegador moderno basado en Firefox con foco en privacidad"
+      description[fr]: "Navigateur moderne axé sur la vie privée basé sur Firefox"
+      description[de]: "Moderner, datenschutzorientierter Firefox-Fork"
+      description[it]: "Browser moderno basato su Firefox orientato alla privacy"
+      selected: false
+      packages:
+        - zen-browser-bin
+    - name: "Floorp"
+      description: "Customizable privacy-oriented browser based on Firefox"
+      description[pt_BR]: "Navegador japonês customizável baseado no Firefox"
+      description[pt]: "Navegador japonês customizável baseado no Firefox"
+      description[es]: "Navegador personalizable basado en Firefox"
+      description[fr]: "Navigateur personnalisable basé sur Firefox"
+      description[de]: "Anpassbarer Browser auf Firefox-Basis"
+      description[it]: "Browser personalizzabile basato su Firefox"
+      selected: false
+      packages:
+        - floorp
+
+- name: "Development"
+  description: "IDEs, code editors and AI development tools"
+  description[pt_BR]: "IDEs, editores de código e ferramentas de desenvolvimento com IA"
+  description[pt]: "IDEs, editores de código e ferramentas de desenvolvimento com IA"
+  description[es]: "IDEs, editores de código y herramientas de desarrollo con IA"
+  description[fr]: "IDE, éditeurs de code et outils de développement IA"
+  description[de]: "IDEs, Code-Editoren und KI-Entwicklungswerkzeuge"
+  description[it]: "IDE, editor di codice e strumenti di sviluppo IA"
+  selected: false
+  critical: false
+  subgroups:
+    - name: "AI Tools"
+      description: "AI-first editors and autonomous assistants"
+      description[pt_BR]: "Editores voltados à IA e assistentes autônomos"
+      description[pt]: "Editores voltados à IA e assistentes autônomos"
+      description[es]: "Editores enfocados en IA y asistentes autónomos"
+      description[fr]: "Éditeurs orientés IA et assistants autonomes"
+      description[de]: "KI-gestützte Editoren und autonome Assistenten"
+      description[it]: "Editor basati su IA e assistenti autonomi"
+      selected: false
+      subgroups:
+        - name: "Zed"
+          description: "High-performance multiplayer code editor with AI features"
+          description[pt_BR]: "Editor em Rust de alta performance com IA nativa integrada"
+          description[pt]: "Editor em Rust de alta performance com IA nativa integrada"
+          description[es]: "Editor en Rust de alto rendimiento con IA nativa"
+          description[fr]: "Éditeur haute performance en Rust avec IA intégrée"
+          description[de]: "Leistungsstarker Rust-Editor mit integrierter KI"
+          description[it]: "Editor ad alte prestazioni in Rust con IA integrata"
+          packages:
+            - zed
+        - name: "Claude Code"
+          description: "Anthropic's autonomous agentic coding tool for terminal"
+          description[pt_BR]: "Agente CLI autônomo da Anthropic para o terminal"
+          description[pt]: "Agente CLI autônomo da Anthropic para o terminal"
+          description[es]: "Agente CLI autónomo de Anthropic para terminal"
+          description[fr]: "Agent CLI autonome d'Anthropic pour terminal"
+          description[de]: "Autonomer Anthropic-CLI-Coding-Agent für das Terminal"
+          description[it]: "Agente CLI autonomo di Anthropic per terminale"
+          packages:
+            - claude-code
+        - name: "GitHub Copilot CLI"
+          description: "Official GitHub Copilot assistant for the command line"
+          description[pt_BR]: "Assistente de linha de comando do GitHub Copilot"
+          description[pt]: "Assistente de linha de comando do GitHub Copilot"
+          description[es]: "Asistente de línea de comandos de GitHub Copilot"
+          description[fr]: "Assistant en ligne de commande de GitHub Copilot"
+          description[de]: "Offizieller GitHub Copilot-Assistent für die Befehlszeile"
+          description[it]: "Assistente da riga di comando di GitHub Copilot"
+          packages:
+            - github-copilot-cli
+        - name: "OpenCode Desktop"
+          description: "Open source desktop AI coding interface"
+          description[pt_BR]: "Interface desktop open source para codificação com IA"
+          description[pt]: "Interface desktop open source para codificação com IA"
+          description[es]: "Interfaz de escritorio de código abierto para programar con IA"
+          description[fr]: "Interface de bureau open-source pour le codage avec IA"
+          description[de]: "Open-Source-Desktop-Oberfläche für KI-Programmierung"
+          description[it]: "Interfaccia desktop open source per codifica con IA"
+          packages:
+            - opencode-desktop-bin
+
+    - name: "Visual Studio Code"
+      description: "Visual Studio Code and open-source distributions"
+      description[pt_BR]: "Visual Studio Code e distribuições livres"
+      description[pt]: "Visual Studio Code e distribuições livres"
+      description[es]: "Visual Studio Code y distribuciones libres"
+      description[fr]: "Visual Studio Code et distributions libres"
+      description[de]: "Visual Studio Code und quelloffene Distributionen"
+      description[it]: "Visual Studio Code e distribuzioni open source"
+      selected: false
+      subgroups:
+        - name: "Visual Studio Code (Microsoft)"
+          description: "Official proprietary build from Microsoft"
+          description[pt_BR]: "Build oficial da Microsoft com sincronização e marketplace oficial"
+          description[pt]: "Build oficial da Microsoft com sincronização e marketplace oficial"
+          description[es]: "Compilación oficial de Microsoft"
+          description[fr]: "Version officielle de Microsoft"
+          description[de]: "Offizieller Build von Microsoft"
+          description[it]: "Build ufficiale di Microsoft"
+          packages:
+            - visual-studio-code-bin
+        - name: "Code - OSS"
+          description: "Arch Linux official open-source build of VS Code"
+          description[pt_BR]: "Compilação de código aberto mantida pelo Arch Linux"
+          description[pt]: "Compilação de código aberto mantida pelo Arch Linux"
+          description[es]: "Compilación de código abierto de Arch Linux"
+          description[fr]: "Version open-source officielle d'Arch Linux"
+          description[de]: "Offizieller Open-Source-Build von Arch Linux"
+          description[it]: "Build open source ufficiale di Arch Linux"
+          packages:
+            - code
+        - name: "VSCodium"
+          description: "Telemetry-free open-source binaries of VS Code"
+          description[pt_BR]: "Binários livres de telemetria da Microsoft"
+          description[pt]: "Binários livres de telemetria da Microsoft"
+          description[es]: "Binarios de código abierto sin telemetría de Microsoft"
+          description[fr]: "Binaires open-source sans télémétrie de Microsoft"
+          description[de]: "Telemetriefreie Open-Source-Binärdateien von VS Code"
+          description[it]: "Binari open source senza telemetria di Microsoft"
+          packages:
+            - vscodium
+
+    - name: "JetBrains"
+      description: "Professional JetBrains IDEs"
+      description[pt_BR]: "IDEs de desenvolvimento da JetBrains"
+      description[pt]: "IDEs de desenvolvimento da JetBrains"
+      description[es]: "IDEs profesionales de JetBrains"
+      description[fr]: "IDE professionnels de JetBrains"
+      description[de]: "Professionelle JetBrains-IDEs"
+      description[it]: "IDE professionali JetBrains"
+      selected: false
+      subgroups:
+        - name: "IntelliJ IDEA Community"
+          description: "Java and Kotlin development environment"
+          description[pt_BR]: "Ambiente para desenvolvimento Java, Kotlin e JVM"
+          description[pt]: "Ambiente para desenvolvimento Java, Kotlin e JVM"
+          description[es]: "Entorno para desarrollo en Java y Kotlin"
+          description[fr]: "Environnement de développement Java et Kotlin"
+          description[de]: "Entwicklungsumgebung für Java und Kotlin"
+          description[it]: "Ambiente di sviluppo Java e Kotlin"
+          packages:
+            - intellij-idea-oss
+        - name: "PyCharm Community"
+          description: "Python IDE for professional development"
+          description[pt_BR]: "IDE dedicada ao desenvolvimento em Python"
+          description[pt]: "IDE dedicada ao desenvolvimento em Python"
+          description[es]: "IDE para desarrollo en Python"
+          description[fr]: "IDE pour le développement Python"
+          description[de]: "Python-IDE für Entwickler"
+          description[it]: "IDE per lo sviluppo in Python"
+          packages:
+            - pycharm-community-edition
+        - name: "Android Studio"
+          description: "Official Android development environment"
+          description[pt_BR]: "Ambiente oficial para desenvolvimento Android"
+          description[pt]: "Ambiente oficial para desenvolvimento Android"
+          description[es]: "Entorno oficial para desarrollo de Android"
+          description[fr]: "Environnement officiel de développement Android"
+          description[de]: "Offizielle Android-Entwicklungsumgebung"
+          description[it]: "Ambiente ufficiale per lo sviluppo Android"
+          packages:
+            - android-studio
+
+    - name: "Dedicated IDEs"
+      description: "Integrated development environments for specific languages"
+      description[pt_BR]: "Ambientes integrados dedicados a linguagens específicas"
+      description[pt]: "Ambientes integrados dedicados a linguagens específicas"
+      description[es]: "Entornos integrados para lenguajes específicos"
+      description[fr]: "Environnements intégrés pour des langages spécifiques"
+      description[de]: "Integrierte Umgebungen für bestimmte Programmiersprachen"
+      description[it]: "Ambienti integrati per linguaggi specifici"
+      selected: false
+      subgroups:
+        - name: "Qt Creator"
+          description: "Cross-platform C++ and Qt GUI application IDE"
+          description[pt_BR]: "IDE multiplataforma para C++ e interfaces gráficas Qt"
+          description[pt]: "IDE multiplataforma para C++ e interfaces gráficas Qt"
+          description[es]: "IDE multiplataforma para C++ y Qt"
+          description[fr]: "IDE multiplateforme pour C++ et Qt"
+          description[de]: "Plattformübergreifende C++- und Qt-IDE"
+          description[it]: "IDE multipiattaforma per C++ e Qt"
+          packages:
+            - qtcreator
+        - name: "KDevelop"
+          description: "KDE's powerful C, C++, Python and PHP IDE"
+          description[pt_BR]: "Poderosa IDE do KDE para C, C++, Python e PHP"
+          description[pt]: "Poderosa IDE do KDE para C, C++, Python e PHP"
+          description[es]: "Potente IDE de KDE para C, C++, Python y PHP"
+          description[fr]: "Puissant IDE de KDE pour C, C++, Python et PHP"
+          description[de]: "Leistungsstarke KDE-IDE für C, C++, Python und PHP"
+          description[it]: "Potente IDE di KDE per C, C++, Python e PHP"
+          packages:
+            - kdevelop
+        - name: "Code::Blocks"
+          description: "Lightweight and extensible C/C++ IDE"
+          description[pt_BR]: "IDE leve e altamente extensível para C e C++"
+          description[pt]: "IDE leve e altamente extensível para C e C++"
+          description[es]: "IDE ligero y extensible para C/C++"
+          description[fr]: "IDE léger et extensible pour C/C++"
+          description[de]: "Leichte und erweiterbare C/C++-IDE"
+          description[it]: "IDE leggero ed estendibile per C/C++"
+          packages:
+            - codeblocks
+        - name: "Geany"
+          description: "Fast and lightweight GTK IDE and editor"
+          description[pt_BR]: "IDE e editor extremamente rápido e leve em GTK"
+          description[pt]: "IDE e editor extremamente rápido e leve em GTK"
+          description[es]: "IDE y editor rápido y ligero en GTK"
+          description[fr]: "IDE et éditeur rapide et léger en GTK"
+          description[de]: "Schnelle und schlanke GTK-IDE"
+          description[it]: "IDE ed editor veloce e leggero in GTK"
+          packages:
+            - geany
+
+    - name: "Advanced Text Editors"
+      description: "Fast terminal and graphical modal editors"
+      description[pt_BR]: "Editores de texto rápidos, modais e gráficos"
+      description[pt]: "Editores de texto rápidos, modais e gráficos"
+      description[es]: "Editores de texto modales y gráficos avanzados"
+      description[fr]: "Éditeurs de texte modaux et graphiques avancés"
+      description[de]: "Erweiterte Terminal- und Grafik-Texteditoren"
+      description[it]: "Editor di testo modali e grafici avanzati"
+      selected: false
+      subgroups:
+        - name: "Neovim"
+          description: "Vim-fork focused on extensibility and modern Lua plugins"
+          description[pt_BR]: "Evolução do Vim focada em extensibilidade e plugins Lua"
+          description[pt]: "Evolução do Vim focada em extensibilidade e plugins Lua"
+          description[es]: "Evolución de Vim con soporte para Lua y LSP"
+          description[fr]: "Évolution de Vim axée sur l'extensibilité et Lua"
+          description[de]: "Moderne Vim-Erweiterung mit Lua-Plugin-Unterstützung"
+          description[it]: "Evoluzione di Vim con supporto moderno per Lua"
+          packages:
+            - neovim
+        - name: "Helix"
+          description: "Post-modern modal editor written in Rust with built-in LSP"
+          description[pt_BR]: "Editor modal moderno em Rust com LSP configurado de fábrica"
+          description[pt]: "Editor modal moderno em Rust com LSP configurado de fábrica"
+          description[es]: "Editor modal moderno en Rust con soporte LSP integrado"
+          description[fr]: "Éditeur modal moderne en Rust avec LSP intégré"
+          description[de]: "Moderner modaler Editor in Rust mit integriertem LSP"
+          description[it]: "Editor modale moderno in Rust con LSP integrato"
+          packages:
+            - helix
+        - name: "GNU Emacs"
+          description: "The extensible, customizable, self-documenting display editor"
+          description[pt_BR]: "Editor extensível, customizável e com ambiente Lisp completo"
+          description[pt]: "Editor extensível, customizável e com ambiente Lisp completo"
+          description[es]: "Editor extensible y personalizable en Lisp"
+          description[fr]: "Éditeur extensible et personnalisable en Lisp"
+          description[de]: "Erweiterbarer und anpassbarer Lisp-Editor"
+          description[it]: "Editor estendibile e personalizzabile in Lisp"
+          packages:
+            - emacs
+        - name: "Sublime Text 4"
+          description: "Sophisticated text editor for code, markup and prose"
+          description[pt_BR]: "Editor de texto veloz e sofisticado para código e prosa"
+          description[pt]: "Editor de texto veloz e sofisticado para código e prosa"
+          description[es]: "Editor sofisticado y rápido para código"
+          description[fr]: "Éditeur de texte sophistiqué et rapide"
+          description[de]: "Ausgereifter und schneller Texteditor"
+          description[it]: "Editor di testo sofisticato e veloce"
+          packages:
+            - sublime-text-4
+
+- name: "Gaming"
+  description: "Game launchers, Wine compatibility layer and performance tools"
+  description[pt_BR]: "Lançadores de jogos, camada Wine e ferramentas de desempenho"
+  description[pt]: "Lançadores de jogos, camada Wine e ferramentas de desempenho"
+  description[es]: "Lanzadores de juegos, capa de compatibilidad Wine y rendimiento"
+  description[fr]: "Lanceurs de jeux, couche Wine et outils de performance"
+  description[de]: "Spiele-Launcher, Wine-Kompatibilität und Optimierungen"
+  description[it]: "Launcher di giochi, compatibilità Wine e strumenti di ottimizzazione"
+  selected: false
+  critical: false
+  subgroups:
+    - name: "Launchers"
+      description: "Digital distribution platforms and game managers"
+      description[pt_BR]: "Lojas e gerenciadores de jogos"
+      description[pt]: "Lojas e gerenciadores de jogos"
+      description[es]: "Plataformas de distribución y lanzadores"
+      description[fr]: "Plateformes de distribution et lanceurs"
+      description[de]: "Vertriebsplattformen und Spiele-Launcher"
+      description[it]: "Piattaforme di distribuzione e launcher"
+      selected: false
+      subgroups:
+        - name: "Steam"
+          description: "Valve's digital gaming platform with Proton support"
+          description[pt_BR]: "Plataforma oficial da Valve com compatibilidade Proton"
+          description[pt]: "Plataforma oficial da Valve com compatibilidade Proton"
+          description[es]: "Plataforma oficial de Valve con Proton"
+          description[fr]: "Plateforme officielle de Valve avec support Proton"
+          description[de]: "Offizielle Spieleplattform von Valve mit Proton"
+          description[it]: "Piattaforma ufficiale di Valve con supporto Proton"
+          packages:
+            - steam
+        - name: "Lutris"
+          description: "Open gaming platform for Linux"
+          description[pt_BR]: "Gerenciador centralizado de jogos para Linux"
+          description[pt]: "Gerenciador centralizado de jogos para Linux"
+          description[es]: "Plataforma de juegos para Linux"
+          description[fr]: "Plateforme de jeux pour Linux"
+          description[de]: "Open-Gaming-Plattform für Linux"
+          description[it]: "Piattaforma di giochi per Linux"
+          packages:
+            - lutris
+        - name: "Heroic Games Launcher"
+          description: "Open-source launcher for Epic Games, GOG and Amazon Prime"
+          description[pt_BR]: "Lançador livre para jogos da Epic Games, GOG e Amazon Prime"
+          description[pt]: "Lançador livre para jogos da Epic Games, GOG e Amazon Prime"
+          description[es]: "Lanzador libre para Epic Games, GOG y Amazon"
+          description[fr]: "Lanceur libre pour Epic Games, GOG et Amazon Prime"
+          description[de]: "Open-Source-Launcher für Epic Games, GOG und Amazon"
+          description[it]: "Launcher open source per Epic Games, GOG e Amazon Prime"
+          packages:
+            - heroic-games-launcher-bin
+        - name: "Bottles"
+          description: "Run Windows software and games with ease"
+          description[pt_BR]: "Gerencie prefixos Wine facilmente para jogos e programas"
+          description[pt]: "Gerencie prefixos Wine facilmente para jogos e programas"
+          description[es]: "Gestor fácil de entornos Wine para programas y juegos"
+          description[fr]: "Gérez facilement les environnements Wine"
+          description[de]: "Einfache Verwaltung von Wine-Präfixen für Spiele und Software"
+          description[it]: "Gestisci facilmente prefissi Wine per software e giochi"
+          packages:
+            - bottles
+        - name: "Prism Launcher"
+          description: "Custom launcher for Minecraft with multiple instances support"
+          description[pt_BR]: "Lançador customizável para Minecraft com suporte a instâncias e mods"
+          description[pt]: "Lançador customizável para Minecraft com suporte a instâncias e mods"
+          description[es]: "Lanzador de Minecraft con soporte para múltiples instancias"
+          description[fr]: "Lanceur de Minecraft avec gestion avancée des instances"
+          description[de]: "Minecraft-Launcher mit Unterstützung für mehrere Instanzen"
+          description[it]: "Launcher per Minecraft con supporto a istanze multiple"
+          packages:
+            - prismlauncher
+
+    - name: "Wine Compatibility"
+      description: "Wine staging and core runtime components"
+      description[pt_BR]: "Camada de compatibilidade Wine Staging e dependências"
+      description[pt]: "Camada de compatibilidade Wine Staging e dependências"
+      description[es]: "Capa de compatibilidad Wine Staging y componentes"
+      description[fr]: "Couche de compatibilité Wine Staging et composants"
+      description[de]: "Wine Staging-Kompatibilitätsschicht und Komponenten"
+      description[it]: "Livello di compatibilità Wine Staging e componenti"
+      selected: false
+      packages:
+        - wine-staging
+        - wine-mono
+        - wine-gecko
+        - winetricks
+
+    - name: "Performance Tools"
+      description: "Performance overlays, compositor and game optimizers"
+      description[pt_BR]: "Overlays de monitoramento, compositor e otimizadores de FPS"
+      description[pt]: "Overlays de monitoramento, compositor e otimizadores de FPS"
+      description[es]: "Overlays de monitoreo, compositor y optimizadores"
+      description[fr]: "Overlays de surveillance, compositeur et optimiseurs"
+      description[de]: "Leistungs-Overlays, Compositor und Optimierungen"
+      description[it]: "Overlay di monitoraggio, compositor e ottimizzazioni"
+      selected: false
+      subgroups:
+        - name: "MangoHud"
+          description: "Vulkan and OpenGL overlay for monitoring FPS and temperatures"
+          description[pt_BR]: "HUD para monitoramento de FPS, temperaturas e hardware (64 e 32 bits)"
+          description[pt]: "HUD para monitoramento de FPS, temperaturas e hardware (64 e 32 bits)"
+          description[es]: "Superposición gráfica para monitorear FPS y hardware"
+          description[fr]: "Affichage tête haute pour surveiller les FPS et composants"
+          description[de]: "Overlay zur Überwachung von FPS und Hardwareauslastung"
+          description[it]: "Overlay per monitorare FPS, temperature e hardware"
+          packages:
+            - mangohud
+        - name: "GOverlay"
+          description: "Graphical user interface to manage Vulkan overlays"
+          description[pt_BR]: "Interface gráfica para configurar o MangoHud e overlays"
+          description[pt]: "Interface gráfica para configurar o MangoHud e overlays"
+          description[es]: "Interfaz gráfica para configurar MangoHud y capas"
+          description[fr]: "Interface graphique pour configurer MangoHud"
+          description[de]: "Grafische Oberfläche zur Verwaltung von Vulkan-Overlays"
+          description[it]: "Interfaccia grafica per configurare MangoHud e overlay"
+          packages:
+            - goverlay
+        - name: "GameScope"
+          description: "Micro-compositor from Valve for gaming resolution and scaling"
+          description[pt_BR]: "Micro-compositor da Valve para controle de resolução, FSR e HDR"
+          description[pt]: "Micro-compositor da Valve para controle de resolução, FSR e HDR"
+          description[es]: "Microcompositor de Valve para escalado y resolución"
+          description[fr]: "Micro-compositeur de Valve pour la mise à l'échelle et résolution"
+          description[de]: "Micro-Compositor von Valve für Skalierung und Bildraten"
+          description[it]: "Micro-compositor di Valve per risoluzione e scaling"
+          packages:
+            - gamescope
+        - name: "GameMode"
+          description: "Daemon/library optimizing Linux system performance on demand"
+          description[pt_BR]: "Otimizador dinâmico de CPU, GPU e prioridades de processo"
+          description[pt]: "Otimizador dinâmico de CPU, GPU e prioridades de processo"
+          description[es]: "Optimizador dinámico de rendimiento del sistema para juegos"
+          description[fr]: "Optimiseur de performances système à la demande pour les jeux"
+          description[de]: "Systemoptimierer für Linux-Spiele auf Abruf"
+          description[it]: "Ottimizzatore delle prestazioni di sistema per giochi"
+          packages:
+            - gamemode
+            - lib32-gamemode
+        - name: "ProtonUp-Qt"
+          description: "GUI tool to install and update GE-Proton and Luxtorpeda"
+          description[pt_BR]: "Gerenciador gráfico para baixar versões do GE-Proton e Wine-GE"
+          description[pt]: "Gerenciador gráfico para baixar versões do GE-Proton e Wine-GE"
+          description[es]: "Gestor gráfico para instalar y actualizar GE-Proton"
+          description[fr]: "Gestionnaire graphique pour installer et mettre à jour GE-Proton"
+          description[de]: "Grafisches Werkzeug zum Verwalten von GE-Proton"
+          description[it]: "Strumento grafico per installare e aggiornare GE-Proton"
+          packages:
+            - protonup-qt
