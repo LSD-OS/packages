@@ -1,7 +1,7 @@
 # Maintainer: Wendel <wende08@proton.me>
 pkgname=lsd-welcome
 pkgver=1.0.0
-pkgrel=4
+pkgrel=5
 pkgdesc="TUI de boas-vindas da ISO live (idioma, teclado, timezone) e seu serviço dinit"
 arch=('any')
 url="https://github.com/LSD-OS/lsd-welcome"
@@ -10,8 +10,11 @@ depends=('dinit' 'bash' 'sudo' 'kbd' 'curl' 'iputils')
 source=(
     'lsd-welcome'
     'lsd-welcome.service'
+    'lsd-braille.psfu.gz'
 )
+noextract=('lsd-braille.psfu.gz')
 sha256sums=(
+    'SKIP'
     'SKIP'
     'SKIP'
 )
@@ -28,4 +31,8 @@ package() {
     # waits-for = lsd-welcome (gate live-only, ver lsd-welcome.service)
     install -d -m 0755 "${pkgdir}/etc/dinit.d"
     install -m 0644 "${srcdir}/lsd-welcome.service" "${pkgdir}/etc/dinit.d/lsd-welcome"
+
+    # Fonte de console PSF2 com suporte completo a Braille (U+2800..U+28FF) e acentos latinos
+    install -d -m 0755 "${pkgdir}/usr/share/kbd/consolefonts"
+    install -m 0644 "${srcdir}/lsd-braille.psfu.gz" "${pkgdir}/usr/share/kbd/consolefonts/lsd-braille.psfu.gz"
 }

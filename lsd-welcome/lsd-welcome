@@ -19,6 +19,13 @@ export LANG=C.UTF-8
 export LC_ALL=C.UTF-8
 printf '\e%G'
 
+# Carrega a fonte de console com suporte a Braille no TTY para renderizar o logo perfeitamente
+if [ -t 0 ] || [ -e /dev/tty1 ]; then
+    setfont /usr/share/kbd/consolefonts/lsd-braille.psfu.gz 2>/dev/null || \
+    setfont "${0%/*}/lsd-braille.psfu.gz" 2>/dev/null || \
+    setfont lsd-braille 2>/dev/null || true
+fi
+
 # No boot roda na tty1 (aberta acima): silencia as mensagens do kernel
 # para não sujarem a TUI.
 sudo dmesg -n 1 2> /dev/null || true
@@ -123,10 +130,10 @@ langs=(
     "Français|fr|fr_FR.UTF-8"
     "Deutsch|de|de_DE.UTF-8"
     "Italiano|it|it_IT.UTF-8"
-    "Русский|ru|ru_RU.UTF-8"
-    "日本語|ja|ja_JP.UTF-8"
-    "简体中文|zh|zh_CN.UTF-8"
-    "한국어|ko|ko_KR.UTF-8"
+    "Russian (Russkiy)|ru|ru_RU.UTF-8"
+    "Japanese (Nihongo)|ja|ja_JP.UTF-8"
+    "Chinese (Zhongwen)|zh|zh_CN.UTF-8"
+    "Korean (Hangul)|ko|ko_KR.UTF-8"
 )
 
 all_keyboards=(
@@ -144,8 +151,8 @@ all_keyboards=(
     "QWERTZ (Schweiz - Deutsch)|ch|de|sg-latin1|de"
     "QWERTZ (Suisse - Français)|ch|fr|fr_CH-latin1|fr"
     "QWERTY (Italia)|it||it|it"
-    "JCUKEN (Россия)|ru||ru|ru"
-    "OADG 109A (日本)|jp||jp106|ja"
+    "JCUKEN (Russia)|ru||ru|ru"
+    "OADG 109A (Japan)|jp||jp106|ja"
 )
 
 t_nav="Use ↑ ↓ then Enter."
@@ -395,10 +402,14 @@ select_item() {
     for i in $(seq $start $((start + max_display - 1))); do
       if (( i >= ${#items[@]} )); then break; fi
       local name="${items[$i]%%|*}"
+      local pad=$(( w - ${#name} ))
+      (( pad < 0 )) && pad=0
+      local spaces
+      printf -v spaces '%*s' "$pad" ''
       if (( i == sel )); then
-        printf '\e[%d;%dH%s > %-*s %s' "$cur_row" "$opt_col" "$CLR_SEL" "$w" "$name" "$CLR_RESET"
+        printf '\e[%d;%dH%s > %s%s %s' "$cur_row" "$opt_col" "$CLR_SEL" "$name" "$spaces" "$CLR_RESET"
       else
-        printf '\e[%d;%dH%s   %-*s %s' "$cur_row" "$opt_col" "$CLR_ITEM" "$w" "$name" "$CLR_RESET"
+        printf '\e[%d;%dH%s   %s%s %s' "$cur_row" "$opt_col" "$CLR_ITEM" "$name" "$spaces" "$CLR_RESET"
       fi
       (( cur_row++ ))
     done
@@ -556,10 +567,15 @@ while :; do
     # Opções do menu principal
     cur_row=9
     for i in 0 1 2 3 4; do
+      local opt_name="${menu_opt[$i]}"
+      local opt_pad=$(( max_opt_len - ${#opt_name} ))
+      (( opt_pad < 0 )) && opt_pad=0
+      local opt_spaces
+      printf -v opt_spaces '%*s' "$opt_pad" ''
       if (( i == s )); then
-        printf '\e[%d;%dH%s > %-*s %s' "$cur_row" "$opt_col" "$CLR_SEL" "$max_opt_len" "${menu_opt[$i]}" "$CLR_RESET"
+        printf '\e[%d;%dH%s > %s%s %s' "$cur_row" "$opt_col" "$CLR_SEL" "$opt_name" "$opt_spaces" "$CLR_RESET"
       else
-        printf '\e[%d;%dH%s   %-*s %s' "$cur_row" "$opt_col" "$CLR_ITEM" "$max_opt_len" "${menu_opt[$i]}" "$CLR_RESET"
+        printf '\e[%d;%dH%s   %s%s %s' "$cur_row" "$opt_col" "$CLR_ITEM" "$opt_name" "$opt_spaces" "$CLR_RESET"
       fi
       (( cur_row += 2 ))
     done
