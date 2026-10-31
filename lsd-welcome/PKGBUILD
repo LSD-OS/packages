@@ -1,7 +1,7 @@
 # Maintainer: Wendel <wende08@proton.me>
 pkgname=lsd-welcome
 pkgver=1.0.0
-pkgrel=5
+pkgrel=6
 pkgdesc="TUI de boas-vindas da ISO live (idioma, teclado, timezone) e seu serviço dinit"
 arch=('any')
 url="https://github.com/LSD-OS/lsd-welcome"

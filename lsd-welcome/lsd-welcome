@@ -567,10 +567,9 @@ while :; do
     # Opções do menu principal
     cur_row=9
     for i in 0 1 2 3 4; do
-      local opt_name="${menu_opt[$i]}"
-      local opt_pad=$(( max_opt_len - ${#opt_name} ))
+      opt_name="${menu_opt[$i]}"
+      opt_pad=$(( max_opt_len - ${#opt_name} ))
       (( opt_pad < 0 )) && opt_pad=0
-      local opt_spaces
       printf -v opt_spaces '%*s' "$opt_pad" ''
       if (( i == s )); then
         printf '\e[%d;%dH%s > %s%s %s' "$cur_row" "$opt_col" "$CLR_SEL" "$opt_name" "$opt_spaces" "$CLR_RESET"
