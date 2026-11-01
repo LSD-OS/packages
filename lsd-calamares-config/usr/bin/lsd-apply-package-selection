@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# LSD_OS - Sincroniza pacotes desmarcados e serviços após instalação
+
+# Pacotes pré-instalados na ISO que podem ter sido desmarcados no netinstall
+PREINSTALLED=(
+    pv
+    nano
+    micro
+    tree
+    7zip
+    rsync
+    lsdfetch
+    mesa
+    vulkan-intel
+    intel-media-driver
+    libva-utils
+    cosmic
+    dconf
+    cosmic-monitor
+    cosmic-player
+    cosmic-terminal
+    cosmic-text-editor
+    cosmic-wallpapers
+    cosmic-greeter-dinit
+    brave-bin
+)
+
+SELECTED_FILE="/tmp/calamares-netinstall-selected.txt"
+
+# 1. Se o netinstall rodou e salvou seleções, remove os que foram desmarcados
+if [ -f "$SELECTED_FILE" ]; then
+    TO_REMOVE=()
+    for pkg in "${PREINSTALLED[@]}"; do
+        if ! grep -q -x "$pkg" "$SELECTED_FILE"; then
+            if pacman -Q "$pkg" >/dev/null 2>&1; then
+                TO_REMOVE+=("$pkg")
+            fi
+        fi
+    done
+
+    if [ ${#TO_REMOVE[@]} -gt 0 ]; then
+        echo "lsd-apply-package-selection: removendo pacotes desmarcados: ${TO_REMOVE[*]}"
+        pacman -Rns --noconfirm "${TO_REMOVE[@]}" || true
+    fi
+    rm -f "$SELECTED_FILE"
+fi
+
+# 2. Habilita serviços dinit caso pacotes correspondentes tenham sido instalados
+if pacman -Q bluez-dinit >/dev/null 2>&1; then
+    mkdir -p /etc/dinit.d/boot.d
+    ln -sf ../bluetoothd /etc/dinit.d/boot.d/bluetoothd 2>/dev/null || true
+fi
+
+if pacman -Q cups-dinit >/dev/null 2>&1; then
+    mkdir -p /etc/dinit.d/boot.d
+    ln -sf ../cupsd /etc/dinit.d/boot.d/cupsd 2>/dev/null || true
+fi
+
+exit 0
