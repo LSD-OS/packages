@@ -52,7 +52,7 @@
 
 - name: "Web Browsers"
   description: "Choose one or more web browsers"
-  selected: false
+  selected: true
   critical: false
   packages:
     - name: brave-bin
