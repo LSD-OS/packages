@@ -25,27 +25,7 @@ PREINSTALLED=(
     brave-bin
 )
 
-SELECTED_FILE="/tmp/calamares-netinstall-selected.txt"
-
-# 1. Se o netinstall rodou e salvou seleções, remove os que foram desmarcados
-if [ -f "$SELECTED_FILE" ]; then
-    TO_REMOVE=()
-    for pkg in "${PREINSTALLED[@]}"; do
-        if ! grep -q -x "$pkg" "$SELECTED_FILE"; then
-            if pacman -Q "$pkg" >/dev/null 2>&1; then
-                TO_REMOVE+=("$pkg")
-            fi
-        fi
-    done
-
-    if [ ${#TO_REMOVE[@]} -gt 0 ]; then
-        echo "lsd-apply-package-selection: removendo pacotes desmarcados: ${TO_REMOVE[*]}"
-        pacman -Rns --noconfirm "${TO_REMOVE[@]}" || true
-    fi
-    rm -f "$SELECTED_FILE"
-fi
-
-# 2. Habilita serviços dinit caso pacotes correspondentes tenham sido instalados
+# 1. Habilita serviços dinit caso pacotes correspondentes tenham sido instalados
 if pacman -Q bluez-dinit >/dev/null 2>&1; then
     mkdir -p /etc/dinit.d/boot.d
     ln -sf ../bluetoothd /etc/dinit.d/boot.d/bluetoothd 2>/dev/null || true

@@ -1,7 +1,7 @@
 # Maintainer: LSD_OS Team
 pkgname=lsd-calamares-config
 pkgver=1.0.0
-pkgrel=24
+pkgrel=25
 pkgdesc="Calamares installer configuration and launcher for LSD_OS"
 arch=('any')
 license=('GPL3')
@@ -18,10 +18,6 @@ package() {
     install -m 755 "${startdir}/usr/bin/lsd-install-limine" "${pkgdir}/usr/bin/lsd-install-limine"
     install -m 755 "${startdir}/usr/bin/lsd-sync-autologin" "${pkgdir}/usr/bin/lsd-sync-autologin"
     install -m 755 "${startdir}/usr/bin/lsd-apply-package-selection" "${pkgdir}/usr/bin/lsd-apply-package-selection"
-
-    install -d "${pkgdir}/usr/lib/calamares/modules/packages"
-    install -m 644 "${startdir}/usr/lib/calamares/modules/packages/module.desc" "${pkgdir}/usr/lib/calamares/modules/packages/module.desc"
-    install -m 644 "${startdir}/usr/lib/calamares/modules/packages/main.py" "${pkgdir}/usr/lib/calamares/modules/packages/main.py"
 
     install -d "${pkgdir}/usr/share/applications"
     install -m 644 "${startdir}/usr/share/applications/lsd-calamares.desktop" "${pkgdir}/usr/share/applications/lsd-calamares.desktop"
