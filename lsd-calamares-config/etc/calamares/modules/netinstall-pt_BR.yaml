@@ -45,6 +45,10 @@
       description: "Monitor de sistema do COSMIC"
     - name: cosmic-player
       description: "Reprodutor de mídia do COSMIC"
+    - name: cosmic-store
+      description: "Central de aplicativos e loja do COSMIC"
+    - name: cosmic-viewer
+      description: "Visualizador de imagens do COSMIC"
     - name: cosmic-wallpapers
       description: "Papéis de parede oficiais do COSMIC"
     - name: dconf
@@ -140,13 +144,34 @@
     - name: "Visual Studio Code"
       description: "Visual Studio Code e distribuições de código aberto"
       selected: false
-      packages:
+      subgroups:
         - name: visual-studio-code-bin
           description: "Visual Studio Code - Versão oficial da Microsoft com marketplace completo"
+          selected: true
+          subgroups:
+            - name: visual-studio-code-bin-pkg
+              hidden: true
+              selected: true
+              packages:
+                - visual-studio-code-bin
         - name: code
           description: "Code - OSS - Compilação oficial de código aberto mantida pelo Arch Linux"
+          selected: false
+          subgroups:
+            - name: code-pkg
+              hidden: true
+              selected: true
+              packages:
+                - code
         - name: vscodium
           description: "VSCodium - Binários de código aberto do VS Code livres de telemetria"
+          selected: false
+          subgroups:
+            - name: vscodium-pkg
+              hidden: true
+              selected: true
+              packages:
+                - vscodium
 
     - name: "JetBrains"
       description: "Ambientes de desenvolvimento integrados da JetBrains"

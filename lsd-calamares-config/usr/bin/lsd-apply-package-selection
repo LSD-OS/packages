@@ -18,11 +18,14 @@ PREINSTALLED=(
     dconf
     cosmic-monitor
     cosmic-player
+    cosmic-store
+    cosmic-viewer
     cosmic-terminal
     cosmic-text-editor
     cosmic-wallpapers
     cosmic-greeter-dinit
     brave-bin
+    visual-studio-code-bin
 )
 
 # 1. Habilita serviços dinit caso pacotes correspondentes tenham sido instalados
