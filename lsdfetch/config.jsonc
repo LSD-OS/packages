@@ -61,6 +61,11 @@
             "key": "\u001b[34m󰍛 "
         },
         {
+            "type": "command",
+            "key": "\u001b[34m󰒋 ",
+            "text": "if [ -s /sys/kernel/sched_ext/root/ops ]; then cut -d_ -f1 /sys/kernel/sched_ext/root/ops; elif grep -q 'sched=' /proc/cmdline; then sed -n 's/.*sched=\\([^ ]*\\).*/\\1/p' /proc/cmdline; else echo 'default'; fi"
+        },
+        {
             "type": "uptime",
             "key": "\u001b[34m "
         },
