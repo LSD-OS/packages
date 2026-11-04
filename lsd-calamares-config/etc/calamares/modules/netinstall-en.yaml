@@ -52,23 +52,63 @@
 
 - name: "Web Browsers"
   description: "Choose one or more web browsers"
-  selected: true
+  selected: false
   critical: false
-  packages:
+  subgroups:
     - name: brave-bin
       description: "Brave Browser - Fast, privacy-oriented web browser"
       selected: true
+      subgroups:
+        - name: brave-bin-pkg
+          hidden: true
+          selected: true
+          packages:
+            - brave-bin
     - name: chromium
       description: "Chromium - Open-source web browser from Google"
+      selected: false
+      subgroups:
+        - name: chromium-pkg
+          hidden: true
+          selected: true
+          packages:
+            - chromium
     - name: google-chrome
       description: "Google Chrome - Official Google web browser"
+      selected: false
+      subgroups:
+        - name: google-chrome-pkg
+          hidden: true
+          selected: true
+          packages:
+            - google-chrome
     - name: vivaldi
       description: "Vivaldi - Feature-rich customizable web browser"
+      selected: false
+      subgroups:
+        - name: vivaldi-pkg
+          hidden: true
+          selected: true
+          packages:
+            - vivaldi
     - name: zen-browser-bin
       description: "Zen Browser - Privacy-focused Firefox fork with modern UI"
+      selected: false
+      subgroups:
+        - name: zen-browser-bin-pkg
+          hidden: true
+          selected: true
+          packages:
+            - zen-browser-bin
     - name: floorp
       description: "Floorp - Customizable privacy-oriented browser based on Firefox"
-  subgroups:
+      selected: false
+      subgroups:
+        - name: floorp-pkg
+          hidden: true
+          selected: true
+          packages:
+            - floorp
     - name: "Mozilla Firefox"
       description: "Firefox web browser with dynamic language pack support"
       selected: false

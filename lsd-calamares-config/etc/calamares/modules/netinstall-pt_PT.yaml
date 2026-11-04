@@ -52,23 +52,63 @@
 
 - name: "Navegadores Web"
   description: "Escolha um ou mais navegadores de internet"
-  selected: true
+  selected: false
   critical: false
-  packages:
+  subgroups:
     - name: brave-bin
       description: "Brave Browser - Navegador rápido com foco em privacidade e bloqueio de anúncios"
       selected: true
+      subgroups:
+        - name: brave-bin-pkg
+          hidden: true
+          selected: true
+          packages:
+            - brave-bin
     - name: chromium
       description: "Chromium - Navegador de código aberto que serve de base para o Google Chrome"
+      selected: false
+      subgroups:
+        - name: chromium-pkg
+          hidden: true
+          selected: true
+          packages:
+            - chromium
     - name: google-chrome
       description: "Google Chrome - Navegador web oficial do Google"
+      selected: false
+      subgroups:
+        - name: google-chrome-pkg
+          hidden: true
+          selected: true
+          packages:
+            - google-chrome
     - name: vivaldi
       description: "Vivaldi - Navegador altamente personalizável e repleto de recursos"
+      selected: false
+      subgroups:
+        - name: vivaldi-pkg
+          hidden: true
+          selected: true
+          packages:
+            - vivaldi
     - name: zen-browser-bin
       description: "Zen Browser - Navegador moderno focado em privacidade baseado no Firefox"
+      selected: false
+      subgroups:
+        - name: zen-browser-bin-pkg
+          hidden: true
+          selected: true
+          packages:
+            - zen-browser-bin
     - name: floorp
       description: "Floorp - Navegador japonês altamente customizável baseado no Firefox"
-  subgroups:
+      selected: false
+      subgroups:
+        - name: floorp-pkg
+          hidden: true
+          selected: true
+          packages:
+            - floorp
     - name: "Mozilla Firefox"
       description: "Navegador Mozilla Firefox com pacote de tradução dinâmico para o seu idioma"
       selected: false
