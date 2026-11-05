@@ -5,12 +5,9 @@
 # - Adicionar sistema de versionamento no script before squashfs.
 # - Mudar script do calamares (contém comandos openrc).
 
-# No boot roda via dinit SEM runs-on-console: o login.target da Artix
-# (type = internal + runs-on-console) segura o console para sempre e um
-# serviço runs-on-console ficaria preso na fila ("waiting for console").
-# Em vez disso, abre a tty1 diretamente — o mesmo mecanismo do agetty
-# (é por isso que os getty@ttyN funcionam sem opção de console). Se já
-# tem terminal (usuário rodou "lsd-welcome" num shell), usa o que tem.
+# No boot roda via serviço OpenRC /etc/init.d/lsd-welcome na tty1.
+# Abre a tty1 diretamente se executado como serviço sem terminal.
+# Se já tem terminal (usuário rodou "lsd-welcome" num shell), usa o que tem.
 if [ ! -t 0 ] && [ -e /dev/tty1 ]; then
     exec </dev/tty1 >/dev/tty1 2>/dev/tty1
 fi
@@ -600,8 +597,8 @@ while :; do
       setup_timezone
       ;;
     3)
-      # Iniciar ISO live: sai 0 => o serviço dinit completa e o greeter
-      # sobe (cosmic-greeter tem waits-for = lsd-welcome).
+      # Iniciar ISO live: sai 0 => o serviço OpenRC completa e o greeter
+      # sobe (cosmic-greeter tem need lsd-welcome).
       exit 0
       ;;
     4)

@@ -1,7 +1,7 @@
 # Maintainer: Wendel <wende08@proton.me>
 pkgname=lsd-core
 pkgver=1.0.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Metapacote com os pacotes essenciais do sistema base da LSD_OS!"
 arch=('any')
 url="https://github.com/LSD-OS/packages"
@@ -17,7 +17,7 @@ depends=(
     'linux-cachyos-headers'
     'linux-cachyos-lts'
     'linux-cachyos-lts-headers'
-    'dinit'
+    'openrc'
     'udev'
     'elogind'
     'sudo'
@@ -58,14 +58,13 @@ depends=(
     'chaotic-keyring'
     'chaotic-mirrorlist'
 
-    # Core Dinit Services
-    'dinit-base'
-    'dbus-dinit'
-    'elogind-dinit'
-    'chrony-dinit'
-    'networkmanager-dinit'
-    'openssh-dinit'
-    'cryptsetup-dinit'
+    # Core OpenRC Services
+    'dbus-openrc'
+    'elogind-openrc'
+    'chrony-openrc'
+    'networkmanager-openrc'
+    'openssh-openrc'
+    'cryptsetup-openrc'
 )
 
 package() {

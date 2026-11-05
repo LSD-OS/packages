@@ -1,0 +1,25 @@
+# Maintainer: Wendel <wende08@proton.me>
+pkgname=cosmic-greeter-openrc
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Serviços OpenRC para o cosmic-greeter (greetd com o greeter COSMIC e daemon D-Bus)"
+arch=('any')
+url="https://github.com/pop-os/cosmic-greeter"
+license=('GPL3')
+depends=('cosmic-greeter' 'openrc' 'dbus-openrc' 'elogind-openrc')
+provides=('init-cosmic-greeter' 'init-displaymanager')
+conflicts=('init-cosmic-greeter' 'init-displaymanager')
+source=(
+    'cosmic-greeter'
+    'cosmic-greeter-daemon'
+)
+sha256sums=(
+    'SKIP'
+    'SKIP'
+)
+
+package() {
+    install -d -m 0755 "${pkgdir}/etc/init.d"
+    install -m 0755 "${srcdir}/cosmic-greeter" "${pkgdir}/etc/init.d/cosmic-greeter"
+    install -m 0755 "${srcdir}/cosmic-greeter-daemon" "${pkgdir}/etc/init.d/cosmic-greeter-daemon"
+}

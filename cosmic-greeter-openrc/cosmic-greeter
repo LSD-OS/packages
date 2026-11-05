@@ -1,0 +1,12 @@
+#!/usr/bin/openrc-run
+
+description="COSMIC Greeter (greetd)"
+supervisor=supervise-daemon
+command="/usr/bin/greetd"
+command_args="--config /etc/greetd/cosmic-greeter.toml"
+
+depend() {
+    need dbus elogind cosmic-greeter-daemon
+    after bootmisc
+    provide display-manager
+}

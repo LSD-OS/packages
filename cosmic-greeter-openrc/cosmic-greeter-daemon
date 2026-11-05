@@ -1,0 +1,9 @@
+#!/usr/bin/openrc-run
+
+description="COSMIC Greeter D-Bus daemon"
+supervisor=supervise-daemon
+command="/usr/bin/cosmic-greeter-daemon"
+
+depend() {
+    need dbus
+}

@@ -1,0 +1,9 @@
+#!/usr/bin/openrc-run
+
+description="Power Profiles daemon"
+supervisor=supervise-daemon
+command="/usr/lib/power-profiles-daemon"
+
+depend() {
+    need dbus
+}
