@@ -21,12 +21,24 @@
       description: "Terminal-based tool for monitoring the progress of data through a pipeline"
     - name: mesa
       description: "Open-source OpenGL and Vulkan graphics drivers"
+    - name: vulkan-icd-loader
+      description: "Vulkan Installable Client Driver (ICD) Loader"
     - name: vulkan-intel
       description: "Open-source Vulkan driver for Intel GPUs"
     - name: intel-media-driver
       description: "Intel Media Driver for VAAPI hardware acceleration"
+    - name: vulkan-radeon
+      description: "Open-source Vulkan driver for AMD GPUs (RADV)"
+    - name: libva-mesa-driver
+      description: "Mesa VA-API driver for AMD GPUs hardware acceleration"
     - name: libva-utils
       description: "Intel VA-API media utilities and vainfo"
+    - name: lib32-vulkan-icd-loader
+      description: "Vulkan Installable Client Driver (ICD) Loader (32-bit)"
+    - name: lib32-vulkan-intel
+      description: "Open-source Vulkan driver for Intel GPUs (32-bit)"
+    - name: lib32-vulkan-radeon
+      description: "Open-source Vulkan driver for AMD GPUs (32-bit)"
 
 - name: "COSMIC"
   description: "COSMIC Desktop Environment and default applications"
@@ -37,6 +49,10 @@
       description: "COSMIC Desktop Environment core session and components"
     - name: cosmic-greeter-dinit
       description: "COSMIC display manager and dinit service"
+    - name: power-profiles-daemon
+      description: "System power profile manager (power-saver, balanced, performance)"
+    - name: power-profiles-daemon-dinit
+      description: "Dinit service for power-profiles-daemon"
     - name: cosmic-terminal
       description: "COSMIC terminal emulator"
     - name: cosmic-text-editor

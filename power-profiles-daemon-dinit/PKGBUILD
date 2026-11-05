@@ -1,0 +1,22 @@
+# Maintainer: Wendel <wende08@proton.me>
+pkgname=power-profiles-daemon-dinit
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Serviço dinit para o power-profiles-daemon"
+arch=('any')
+url="https://gitlab.freedesktop.org/upower/power-profiles-daemon"
+license=('GPL3')
+depends=('power-profiles-daemon' 'dinit' 'dbus')
+provides=('power-profiles-daemon-dinit')
+conflicts=()
+source=(
+    'power-profiles-daemon'
+)
+sha256sums=(
+    'SKIP'
+)
+
+package() {
+    install -d -m 0755 "${pkgdir}/etc/dinit.d"
+    install -m 0644 "${srcdir}/power-profiles-daemon" "${pkgdir}/etc/dinit.d/power-profiles-daemon"
+}

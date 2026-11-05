@@ -1,0 +1,7 @@
+# Serviço D-Bus power-profiles-daemon para Dinit
+type               = process
+command            = /usr/lib/dinit/dbus-wait-for -s -f 4 -n org.freedesktop.UPower.PowerProfiles /usr/lib/power-profiles-daemon
+smooth-recovery    = true
+depends-on         = dbus
+ready-notification = pipefd:4
+logfile            = /var/log/dinit/power-profiles-daemon.log
