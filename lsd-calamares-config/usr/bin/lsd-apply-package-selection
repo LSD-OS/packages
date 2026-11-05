@@ -23,20 +23,26 @@ PREINSTALLED=(
     cosmic-terminal
     cosmic-text-editor
     cosmic-wallpapers
-    cosmic-greeter-dinit
+    cosmic-greeter-openrc
     brave-bin
     visual-studio-code-bin
 )
 
-# 1. Habilita serviços dinit caso pacotes correspondentes tenham sido instalados
-if pacman -Q bluez-dinit >/dev/null 2>&1; then
-    mkdir -p /etc/dinit.d/boot.d
-    ln -sf ../bluetoothd /etc/dinit.d/boot.d/bluetoothd 2>/dev/null || true
+# 1. Habilita serviços OpenRC caso pacotes correspondentes tenham sido instalados
+if pacman -Q bluez-openrc >/dev/null 2>&1; then
+    for s in bluetoothd bluetooth; do
+        if [ -x "/etc/init.d/$s" ]; then
+            rc-update add "$s" default 2>/dev/null || ln -sf "/etc/init.d/$s" "/etc/runlevels/default/$s" 2>/dev/null || true
+        fi
+    done
 fi
 
-if pacman -Q cups-dinit >/dev/null 2>&1; then
-    mkdir -p /etc/dinit.d/boot.d
-    ln -sf ../cupsd /etc/dinit.d/boot.d/cupsd 2>/dev/null || true
+if pacman -Q cups-openrc >/dev/null 2>&1; then
+    for s in cupsd cups; do
+        if [ -x "/etc/init.d/$s" ]; then
+            rc-update add "$s" default 2>/dev/null || ln -sf "/etc/init.d/$s" "/etc/runlevels/default/$s" 2>/dev/null || true
+        fi
+    done
 fi
 
 exit 0

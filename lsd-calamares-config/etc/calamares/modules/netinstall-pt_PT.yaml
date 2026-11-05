@@ -4,7 +4,7 @@
   critical: false
   packages:
     - name: lsd-core
-      description: "Sistema base essencial, kernel, bootloader, rede e serviços dinit fundamentais"
+      description: "Sistema base essencial, kernel, bootloader, rede e serviços OpenRC fundamentais"
     - name: lsdfetch
       description: "Exibidor de informações do sistema com tema e logo do LSD_OS!"
     - name: micro
@@ -30,7 +30,7 @@
     - name: vulkan-radeon
       description: "Driver Vulkan open-source para GPUs AMD (RADV)"
     - name: libva-mesa-driver
-      description: "Driver VA-API do Mesa para aceleração de vídeo por hardware em GPUs AMD"
+      description: "Driver VA-API da Mesa para aceleração de vídeo por hardware em GPUs AMD"
     - name: libva-utils
       description: "Utilitários de mídia Intel VA-API e vainfo"
     - name: lib32-vulkan-icd-loader
@@ -47,12 +47,12 @@
   packages:
     - name: cosmic
       description: "Sessão principal e componentes do ambiente desktop COSMIC"
-    - name: cosmic-greeter-dinit
-      description: "Gerenciador de login do COSMIC e serviço dinit"
+    - name: cosmic-greeter-openrc
+      description: "Gerenciador de login do COSMIC e serviço OpenRC"
     - name: power-profiles-daemon
-      description: "Gestor de perfis de energia do sistema (poupança, equilibrado, desempenho)"
-    - name: power-profiles-daemon-dinit
-      description: "Serviço dinit para o power-profiles-daemon"
+      description: "Gerenciador de perfis de energia do sistema (economia, balanceado, desempenho)"
+    - name: power-profiles-daemon-openrc
+      description: "Serviço OpenRC para o power-profiles-daemon"
     - name: cosmic-terminal
       description: "Emulador de terminal do COSMIC"
     - name: cosmic-text-editor
@@ -62,7 +62,7 @@
     - name: cosmic-player
       description: "Reprodutor de mídia do COSMIC"
     - name: cosmic-store
-      description: "Central de aplicações e loja do COSMIC"
+      description: "Central de aplicativos e loja do COSMIC"
     - name: cosmic-viewer
       description: "Visualizador de imagens do COSMIC"
     - name: cosmic-wallpapers
@@ -276,14 +276,14 @@
             - lib32-gamemode
 
 - name: "Bluetooth"
-  description: "Pilha de protocolos Bluetooth, serviço dinit e gerenciador gráfico"
+  description: "Pilha de protocolos Bluetooth, serviço OpenRC e gerenciador gráfico"
   selected: false
   critical: false
   packages:
     - name: bluez
       description: "Daemons oficiais da pilha de protocolos Bluetooth para Linux"
-    - name: bluez-dinit
-      description: "Scripts de serviço dinit para o Bluetooth (bluez)"
+    - name: bluez-openrc
+      description: "Scripts de serviço OpenRC para o Bluetooth (bluez)"
     - name: bluez-utils
       description: "Utilitários de controle e gerenciamento para Bluetooth (bluetoothctl)"
     - name: bluez-libs
@@ -302,8 +302,8 @@
   packages:
     - name: cups
       description: "Daemon e sistema de impressão OpenPrinting CUPS"
-    - name: cups-dinit
-      description: "Scripts de serviço dinit para o sistema de impressão CUPS"
+    - name: cups-openrc
+      description: "Scripts de serviço OpenRC para o sistema de impressão CUPS"
     - name: cups-filters
       description: "Filtros e backends de conversão para o OpenPrinting CUPS"
     - name: cups-pdf

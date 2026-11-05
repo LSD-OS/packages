@@ -4,7 +4,7 @@
   critical: false
   packages:
     - name: lsd-core
-      description: "Core system, kernel, bootloader, network and base dinit services"
+      description: "Core system, kernel, bootloader, network and base OpenRC services"
     - name: lsdfetch
       description: "System information fetcher with LSD_OS! theme"
     - name: micro
@@ -47,12 +47,12 @@
   packages:
     - name: cosmic
       description: "COSMIC Desktop Environment core session and components"
-    - name: cosmic-greeter-dinit
-      description: "COSMIC display manager and dinit service"
+    - name: cosmic-greeter-openrc
+      description: "COSMIC display manager and OpenRC service"
     - name: power-profiles-daemon
       description: "System power profile manager (power-saver, balanced, performance)"
-    - name: power-profiles-daemon-dinit
-      description: "Dinit service for power-profiles-daemon"
+    - name: power-profiles-daemon-openrc
+      description: "OpenRC service for power-profiles-daemon"
     - name: cosmic-terminal
       description: "COSMIC terminal emulator"
     - name: cosmic-text-editor
@@ -276,14 +276,14 @@
             - lib32-gamemode
 
 - name: "Bluetooth"
-  description: "Bluetooth protocol stack, dinit service and graphical manager"
+  description: "Bluetooth protocol stack, OpenRC service and graphical manager"
   selected: false
   critical: false
   packages:
     - name: bluez
       description: "Daemons for the official Linux Bluetooth protocol stack"
-    - name: bluez-dinit
-      description: "dinit service scripts for bluez"
+    - name: bluez-openrc
+      description: "OpenRC service scripts for bluez"
     - name: bluez-utils
       description: "Development and debugging utilities for the Bluetooth protocol stack"
     - name: bluez-libs
@@ -302,8 +302,8 @@
   packages:
     - name: cups
       description: "OpenPrinting CUPS daemon and printing system"
-    - name: cups-dinit
-      description: "dinit service scripts for CUPS"
+    - name: cups-openrc
+      description: "OpenRC service scripts for CUPS"
     - name: cups-filters
       description: "OpenPrinting CUPS filters"
     - name: cups-pdf
