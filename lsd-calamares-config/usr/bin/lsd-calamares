@@ -6,9 +6,9 @@ if [ -f /etc/lsd-welcome/install_mode ]; then
     INSTALL_MODE=$(cat /etc/lsd-welcome/install_mode 2>/dev/null || echo "offline")
 fi
 
+# Se não estiver definido como online, faz teste de ping direto com timeout curto (1s) sem bloqueio DNS lento
 if [ "$INSTALL_MODE" != "online" ]; then
-    if curl -fsI --max-time 3 https://archlinux.org >/dev/null 2>&1 || \
-       ping -c 1 -W 2 1.1.1.1 >/dev/null 2>&1; then
+    if ping -c 1 -W 1 1.1.1.1 >/dev/null 2>&1 || ping -c 1 -W 1 8.8.8.8 >/dev/null 2>&1; then
         INSTALL_MODE="online"
         sudo mkdir -p /etc/lsd-welcome
         echo "online" | sudo tee /etc/lsd-welcome/install_mode >/dev/null
@@ -53,14 +53,52 @@ else
     fi
 fi
 
-# Permitir que root acesse o servidor de display (Xwayland / X11)
+USER_RUNTIME="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+
+# Detecta ou valida WAYLAND_DISPLAY
+if [ -z "$WAYLAND_DISPLAY" ]; then
+    if [ -S "$USER_RUNTIME/wayland-0" ]; then
+        export WAYLAND_DISPLAY="wayland-0"
+    else
+        W_SOCK=$(ls "$USER_RUNTIME"/wayland-* 2>/dev/null | head -n 1)
+        [ -n "$W_SOCK" ] && export WAYLAND_DISPLAY="${W_SOCK##*/}"
+    fi
+fi
+export WAYLAND_DISPLAY="${WAYLAND_DISPLAY:-wayland-0}"
+
+# Detecta DISPLAY para fallback em X11/Xwayland
+if [ -z "$DISPLAY" ]; then
+    for sock in /tmp/.X11-unix/X*; do
+        if [ -S "$sock" ]; then
+            num="${sock##*/X}"
+            export DISPLAY=":${num}"
+            break
+        fi
+    done
+    export DISPLAY="${DISPLAY:-:0}"
+fi
+
+# Concede acesso ao servidor X11 para o usuário root
 if command -v xhost >/dev/null 2>&1; then
     xhost +SI:localuser:root >/dev/null 2>&1 || xhost +local:root >/dev/null 2>&1 || true
 fi
 
-# Variáveis para suporte Wayland e Qt6
-if [ -n "$WAYLAND_DISPLAY" ]; then
-    export QT_QPA_PLATFORM="wayland;xcb"
+# Suporte ao Wayland para processo root:
+# Cria /run/user/0 com link para o socket Wayland do liveuser, contornando a validação
+# da libwayland/Qt6 que exige diretório pertencente ao UID do processo atual (0).
+if [ -S "${USER_RUNTIME}/${WAYLAND_DISPLAY}" ]; then
+    sudo mkdir -p /run/user/0
+    sudo chmod 700 /run/user/0
+    sudo ln -sf "${USER_RUNTIME}/${WAYLAND_DISPLAY}" "/run/user/0/${WAYLAND_DISPLAY}"
+    export XDG_RUNTIME_DIR=/run/user/0
 fi
 
-exec sudo -E /usr/bin/calamares "$@"
+# Variáveis para suporte Wayland e Qt6
+export QT_QPA_PLATFORM="wayland;xcb"
+export QT_AUTO_SCREEN_SCALE_FACTOR=1
+
+if [ "$(id -u)" -eq 0 ]; then
+    exec /usr/bin/calamares "$@"
+else
+    exec sudo -E /usr/bin/calamares "$@"
+fi

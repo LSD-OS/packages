@@ -1,1 +1,2 @@
+Defaults env_keep += "WAYLAND_DISPLAY DISPLAY XDG_RUNTIME_DIR QT_QPA_PLATFORM"
 ALL ALL=(ALL) SETENV: NOPASSWD: /usr/bin/calamares, /usr/bin/lsd-calamares
