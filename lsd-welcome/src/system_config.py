@@ -62,6 +62,7 @@ def apply_keyboard(xkb_layout: str, xkb_variant: str, vconsole_keymap: str) -> N
     
     Updates:
     - /usr/share/cosmic/com.system76.CosmicComp/v1/xkb_config (RON format)
+    - ~/.config/cosmic/com.system76.CosmicComp/v1/xkb_config (RON format)
     - /etc/vconsole.conf (KEYMAP)
     - Runs loadkeys for current console session
     """
@@ -73,6 +74,15 @@ def apply_keyboard(xkb_layout: str, xkb_variant: str, vconsole_keymap: str) -> N
         "/usr/share/cosmic/com.system76.CosmicComp/v1/xkb_config",
         ron_content,
     )
+
+    # User level config for cosmic-comp inotify reload
+    try:
+        user_dir = Path.home() / ".config" / "cosmic" / "com.system76.CosmicComp" / "v1"
+        user_dir.mkdir(parents=True, exist_ok=True)
+        user_xkb = user_dir / "xkb_config"
+        user_xkb.write_text(ron_content, encoding="utf-8")
+    except OSError:
+        pass
 
     vconsole_content = f"KEYMAP={vconsole_keymap}\n"
     _sudo_write_file("/etc/vconsole.conf", vconsole_content)

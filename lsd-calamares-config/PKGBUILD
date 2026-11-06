@@ -18,6 +18,7 @@ package() {
     install -m 755 "${startdir}/usr/bin/lsd-install-limine" "${pkgdir}/usr/bin/lsd-install-limine"
     install -m 755 "${startdir}/usr/bin/lsd-sync-autologin" "${pkgdir}/usr/bin/lsd-sync-autologin"
     install -m 755 "${startdir}/usr/bin/lsd-apply-package-selection" "${pkgdir}/usr/bin/lsd-apply-package-selection"
+    install -m 755 "${startdir}/usr/bin/lsd-sync-live-to-target" "${pkgdir}/usr/bin/lsd-sync-live-to-target"
 
     install -d "${pkgdir}/usr/share/applications"
     install -m 644 "${startdir}/usr/share/applications/lsd-calamares.desktop" "${pkgdir}/usr/share/applications/lsd-calamares.desktop"

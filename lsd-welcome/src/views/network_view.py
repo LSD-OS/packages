@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import threading
 from typing import Callable, Any
 
 try:
@@ -19,11 +20,12 @@ except ImportError:
 try:
     import gi
     gi.require_version("Gtk", "4.0")
-    from gi.repository import Gtk
+    from gi.repository import Gtk, GLib
     GTK_AVAILABLE = True
 except (ImportError, ValueError):
     GTK_AVAILABLE = False
     Gtk = object  # type: ignore
+    GLib = None   # type: ignore
 
 
 class NetworkView(Gtk.Box):  # type: ignore
@@ -241,19 +243,71 @@ class NetworkView(Gtk.Box):  # type: ignore
             row.set_child(hbox)
             self.wifi_listbox.append(row)
 
+    def _run_on_ui_thread(self, func: Callable[..., Any], *args: Any) -> None:
+        """Schedules a function to run on the GTK main loop, or executes immediately if headless."""
+        if not self._headless and GLib is not None and hasattr(GLib, "idle_add"):
+            GLib.idle_add(func, *args)
+        else:
+            func(*args)
+
+    def _connect_async(
+        self,
+        ssid: str,
+        password: str | None = None,
+        dialog: Any = None,
+        on_success: Callable[[], None] | None = None,
+        on_failure: Callable[[str], None] | None = None,
+    ) -> threading.Thread:
+        """Connects to Wi-Fi asynchronously in a background thread to prevent GUI lockup."""
+        def worker() -> None:
+            success = False
+            err_msg = ""
+            try:
+                success = self.network_service.connect_wifi(ssid, password=password)
+            except Exception as exc:
+                err_msg = str(exc)
+
+            def update_ui() -> None:
+                if success:
+                    self.set_install_mode("online")
+                    if on_success is not None:
+                        on_success()
+                    elif dialog is not None:
+                        try:
+                            dialog.close()
+                        except Exception:
+                            pass
+                else:
+                    if on_failure is not None:
+                        on_failure(err_msg or "Falha ao conectar à rede Wi-Fi.")
+                    elif dialog is not None:
+                        try:
+                            dialog.close()
+                        except Exception:
+                            pass
+                self.refresh_networks()
+
+            self._run_on_ui_thread(update_ui)
+
+        thread = threading.Thread(target=worker, daemon=True)
+        thread.start()
+        return thread
+
     def _on_connect_clicked(self, ssid: str, security: str) -> None:
         # Prompt password dialog if secured
         is_secured = bool(security and security != "--")
         if not is_secured:
-            self.network_service.connect_wifi(ssid, password=None)
-            self.set_install_mode("online")
-            self.refresh_networks()
+            self._connect_async(ssid, password=None)
+            return
+
+        if self._headless:
+            self._connect_async(ssid, password=None)
             return
 
         # Simple password prompt entry inside dialog or popover
         dialog = Gtk.Window(title=f"Conectar a {ssid}")
         dialog.set_modal(True)
-        dialog.set_default_size(320, 160)
+        dialog.set_default_size(320, 180)
 
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
         box.set_margin_top(16)
@@ -262,10 +316,21 @@ class NetworkView(Gtk.Box):  # type: ignore
         box.set_margin_end(16)
 
         lbl = Gtk.Label(text=f"Digite a senha para '{ssid}':")
+        lbl.set_halign(Gtk.Align.START)
         box.append(lbl)
 
         pwd_entry = Gtk.PasswordEntry()
+        pwd_entry.set_hexpand(True)
         box.append(pwd_entry)
+
+        status_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        spinner = Gtk.Spinner()
+        status_box.append(spinner)
+
+        status_lbl = Gtk.Label(text="")
+        status_lbl.set_halign(Gtk.Align.START)
+        status_box.append(status_lbl)
+        box.append(status_box)
 
         actions = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8, halign=Gtk.Align.END)
         cancel_btn = Gtk.Button(label="Cancelar")
@@ -275,14 +340,40 @@ class NetworkView(Gtk.Box):  # type: ignore
         ok_btn = Gtk.Button(label="Conectar")
         ok_btn.add_css_class("suggested-action")
 
-        def _do_connect(_b: Any) -> None:
+        def _do_connect(_b: Any = None) -> None:
             password = pwd_entry.get_text()
-            self.network_service.connect_wifi(ssid, password=password)
-            self.set_install_mode("online")
-            dialog.close()
-            self.refresh_networks()
+            ok_btn.set_sensitive(False)
+            cancel_btn.set_sensitive(False)
+            pwd_entry.set_sensitive(False)
+            status_lbl.set_text("Conectando...")
+            status_lbl.remove_css_class("error")
+            spinner.start()
+
+            def _handle_failure(err: str) -> None:
+                spinner.stop()
+                ok_btn.set_sensitive(True)
+                cancel_btn.set_sensitive(True)
+                pwd_entry.set_sensitive(True)
+                status_lbl.set_text(err)
+                status_lbl.add_css_class("error")
+
+            def _handle_success() -> None:
+                spinner.stop()
+                try:
+                    dialog.close()
+                except Exception:
+                    pass
+
+            self._connect_async(
+                ssid,
+                password=password,
+                dialog=dialog,
+                on_success=_handle_success,
+                on_failure=_handle_failure,
+            )
 
         ok_btn.connect("clicked", _do_connect)
+        pwd_entry.connect("activate", _do_connect)
         actions.append(ok_btn)
         box.append(actions)
 
