@@ -3,11 +3,10 @@
 
 INSTALL_MODE="offline"
 if [ -f /etc/lsd-welcome/install_mode ]; then
-    INSTALL_MODE=$(cat /etc/lsd-welcome/install_mode 2>/dev/null || echo "offline")
-fi
-
-# Se não estiver definido como online, faz teste de ping direto com timeout curto (1s) sem bloqueio DNS lento
-if [ "$INSTALL_MODE" != "online" ]; then
+    INSTALL_MODE=$(cat /etc/lsd-welcome/install_mode 2>/dev/null | tr -d '[:space:]')
+    [ -z "$INSTALL_MODE" ] && INSTALL_MODE="offline"
+else
+    # Se não houver arquivo prévio, faz teste de ping direto com timeout curto (1s) sem bloqueio DNS lento
     if ping -c 1 -W 1 1.1.1.1 >/dev/null 2>&1 || ping -c 1 -W 1 8.8.8.8 >/dev/null 2>&1; then
         INSTALL_MODE="online"
         sudo mkdir -p /etc/lsd-welcome
@@ -41,8 +40,8 @@ case "$LOCALE_CODE" in
 esac
 
 # Chaveamento limpo e declarativo via arquivos prontos:
-#   online  -> settings_online.conf  (welcome_online, netinstall, packages@online, lsdoptional)
-#   offline -> settings_offline.conf (welcome, sem netinstall, packages@offline)
+#   online  -> settings_online.conf  (netinstall, packages@online, lsdoptional)
+#   offline -> settings_offline.conf (sem netinstall, packages@offline)
 if [ "$INSTALL_MODE" = "online" ]; then
     if [ -f /etc/calamares/settings_online.conf ]; then
         sudo cp -f /etc/calamares/settings_online.conf /etc/calamares/settings.conf
