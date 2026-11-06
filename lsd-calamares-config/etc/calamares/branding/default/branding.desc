@@ -18,16 +18,16 @@ strings:
 
 images:
     # productBanner:       "banner.png"
-    productIcon:         "squid.png"
-    productLogo:         "squid.png"
+    productIcon:         "logo.png"
+    productLogo:         "logo.png"
     # productWallpaper:    "wallpaper.png"
-    productWelcome:      "2-alci.png"
+    productWelcome:      "logo.png"
 
 style:
-   sidebarBackground:    "#292F34"
+   sidebarBackground:    "#18181d"
    sidebarText:          "#FFFFFF"
-   sidebarTextSelect:    "#292F34"
-   sidebarTextHighlight: "#D35400"
+   sidebarTextSelect:    "#26262e"
+   sidebarTextHighlight: "#5e6ad2"
 
 slideshow:               "show.qml"
 slideshowAPI: 2

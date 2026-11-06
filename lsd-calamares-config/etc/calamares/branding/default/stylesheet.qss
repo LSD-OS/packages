@@ -1,263 +1,410 @@
 /*
-
-A branding component can ship a stylesheet (like this one)
-which is applied to parts of the Calamares user-interface.
-In principle, all parts can be styled through CSS.
-Missing parts should be filed as issues.
-
-The IDs are based on the object names in the C++ code.
-You can use the Debug Dialog to find out object names:
-  - Open the debug dialog
-  - Choose tab *Tools*
-  - Click *Widget Tree* button
-The list of object names is printed in the log.
-
-Documentation for styling Qt Widgets through a stylesheet
-can be found at
-    https://doc.qt.io/qt-5/stylesheet-examples.html
-    https://doc.qt.io/qt-5/stylesheet-reference.html
-In Calamares, styling widget classes is supported (e.g.
-using `QComboBox` as a selector).
-
-This example stylesheet has all the actual styling commented out.
-The examples are not exhaustive.
-
-*/
-
+ * LSD_OS Calamares Branding Stylesheet
+ * COSMIC-harmonized Dark Theme
+ * Palette:
+ *   Base Background: #18181d
+ *   Surface / Cards: #26262e
+ *   Accent / Active: #5e6ad2
+ *   Border:          #363642
+ *   Text:            #f2f2f2
+ */
 
 /* ########## MAIN APPLICATION WINDOW ########## */
 
 #mainApp {
+    background-color: #18181d;
+    color: #f2f2f2;
 }
 
-#mainText{
-	font : bold 16px;
+#mainText {
+    font: bold 16px;
+    color: #ffffff;
 }
 
 #sidebarApp {
-
+    background-color: #18181d;
 }
 
 #logoApp {
+    padding: 12px;
 }
 
 #sidebarMenuApp {
-	padding: 3px;
-	background-color: #292F34;
+    padding: 6px;
+    background-color: #18181d;
+    color: #f2f2f2;
 }
 
 QWidget {
-	font: 16px;
+    background-color: #18181d;
+    color: #f2f2f2;
+    font: 16px;
 }
-
-QTextEdit, QListView {
-}
-QDialogButtonBox {
-}
-QAbstractSpinBox {
-}
-QListWidget::item:alternate {
-}
-
 
 #debugButton {
-	font: bold 8px;
-	color: #FFFFFF;
+    font: bold 10px;
+    color: #f2f2f2;
+    background-color: #26262e;
+    border: 1px solid #363642;
+    border-radius: 4px;
+    padding: 2px 6px;
 }
 
-
-/* ########## TOOLTIP ########## */
-
-
+/* ########## BUTTONS ########## */
 
 QPushButton {
-    font : 16px;
+    font: 16px;
+    background-color: #26262e;
+    color: #f2f2f2;
+    border: 1px solid #363642;
+    border-radius: 6px;
+    padding: 6px 16px;
+    min-height: 24px;
+}
+
+QPushButton:hover {
+    background-color: #32323d;
+    border: 1px solid #5e6ad2;
+}
+
+QPushButton:pressed {
+    background-color: #5e6ad2;
+    color: #ffffff;
+}
+
+QPushButton:disabled {
+    background-color: #1e1e24;
+    color: #6c6c7d;
+    border-color: #2a2a35;
+}
+
+QPushButton:default {
+    background-color: #5e6ad2;
+    color: #ffffff;
+    border: 1px solid #5e6ad2;
+}
+
+QPushButton:default:hover {
+    background-color: #717de0;
 }
 
 QDialogButtonBox {
-	dialogbuttonbox-buttons-have-icons: 0;
+    dialogbuttonbox-buttons-have-icons: 0;
 }
 
+/* ########## QLIST VIEW & TREE VIEW ########## */
 
-/* ########## QLIST VIEW ########## */
-
-QListView {
-		font: 16px;
+QListView, QTreeView, QTableView, QListWidget {
+    font: 16px;
+    background-color: #26262e;
+    color: #f2f2f2;
+    border: 1px solid #363642;
+    border-radius: 6px;
+    outline: none;
 }
 
+QListView::item, QTreeView::item {
+    padding: 6px;
+    border-radius: 4px;
+}
 
-/* ########## QLINE EDIT ########## */
+QListView::item:selected, QTreeView::item:selected {
+    background-color: #5e6ad2;
+    color: #ffffff;
+}
+
+QListView::item:hover, QTreeView::item:hover {
+    background-color: #32323d;
+}
+
+QListWidget::item:alternate {
+    background-color: #202027;
+}
+
+/* ########## TEXT INPUTS ########## */
+
+QLineEdit, QTextEdit, QPlainTextEdit, QAbstractSpinBox {
+    font: 16px;
+    background-color: #26262e;
+    color: #f2f2f2;
+    border: 1px solid #363642;
+    border-radius: 6px;
+    padding: 6px;
+    selection-background-color: #5e6ad2;
+    selection-color: #ffffff;
+}
+
+QLineEdit:focus, QTextEdit:focus, QPlainTextEdit:focus, QAbstractSpinBox:focus {
+    border: 1px solid #5e6ad2;
+}
 
 QLineEdit#LE_TestKeyboard {
-	font: 16px;
+    font: 16px;
 }
 
 QLineEdit#m_passphraseLineEdit, QLineEdit#vgName,
 QLineEdit#m_confirmLineEdit {
-	font: 16px;
+    font: 16px;
 }
 
 QLineEdit#textBoxUserVerifiedPassword, QLineEdit#textBoxVerifiedRootPassword {
-	font: 16px;
+    font: 16px;
 }
 
 QLineEdit#textBoxFullName, QLineEdit#textBoxLoginName, QLineEdit#textBoxHostName,
 QLineEdit#textBoxUserPassword, QLineEdit#textBoxRootPassword {
-	font: 16px;
+    font: 16px;
 }
 
 #textBoxFullName, #textBoxLoginName, #textBoxHostName, #textBoxUserPassword,
 #textBoxRootPassword, #textBoxAutoLogin, #vgName {
-	font: 16px;
+    font: 16px;
 }
 
 #textBoxUserVerifiedPassword, #textBoxVerifiedRootPassword,
 #LE_TestKeyboard, #m_confirmLineEdit, #m_passphraseLineEdit {
-	font: 16px;
+    font: 16px;
 }
 
-/* ##########PARTITION ########## */
+/* ########## PARTITION WIDGET ########## */
 
 #partResizerWidget {
-	font: 16px;
+    font: 16px;
+    background-color: #18181d;
 }
 
 /* ########## PAGE_USERSETUP ########## */
 
- #labelWhatIsYourName {
-	font: 16px;
+#labelWhatIsYourName {
+    font: 16px;
 }
- #textBoxFullName {
-	font: 16px;
+#textBoxFullName {
+    font: 16px;
 }
- #labelFullName {
-	font: 16px;
+#labelFullName {
+    font: 16px;
 }
- #labelFullNameError {
-	font: 16px;
+#labelFullNameError {
+    font: 16px;
+    color: #e06c75;
 }
- #username_label_2 {
-	font: 16px;
+#username_label_2 {
+    font: 16px;
 }
- #textBoxLoginName {
-	font: 16px;
+#textBoxLoginName {
+    font: 16px;
 }
- #labelUsername {
-	font: 16px;
+#labelUsername {
+    font: 16px;
 }
- #labelUsernameError {
-	font: 16px;
+#labelUsernameError {
+    font: 16px;
+    color: #e06c75;
 }
- #hostname_label_2 {
-	font: 16px;
+#hostname_label_2 {
+    font: 16px;
 }
- #textBoxHostName {
-	font: 16px;
+#textBoxHostName {
+    font: 16px;
 }
- #labelHostname {
-	font: 16px;
+#labelHostname {
+    font: 16px;
 }
- #labelHostnameError {
-	font: 16px;
+#labelHostnameError {
+    font: 16px;
+    color: #e06c75;
 }
- #password_label_2 {
-	font: 16px;
+#password_label_2 {
+    font: 16px;
 }
- #textBoxUserPassword {
-	font: 16px;
+#textBoxUserPassword {
+    font: 16px;
 }
- #textBoxUserVerifiedPassword {
-	font: 16px;
+#textBoxUserVerifiedPassword {
+    font: 16px;
 }
- #labelUserPassword {
-	font: 16px;
+#labelUserPassword {
+    font: 16px;
 }
- #labelUserPasswordError {
-	font: 16px;
+#labelUserPasswordError {
+    font: 16px;
+    color: #e06c75;
 }
- #checkBoxRequireStrongPassword {
-	font: 16px;
+#checkBoxRequireStrongPassword {
+    font: 16px;
 }
- #checkBoxDoAutoLogin {
-	font: 16px;
+#checkBoxDoAutoLogin {
+    font: 16px;
 }
- #checkBoxReusePassword {
-	font: 16px;
+#checkBoxReusePassword {
+    font: 16px;
 }
- #labelChooseRootPassword {
-	font: 16px;
+#labelChooseRootPassword {
+    font: 16px;
 }
- #textBoxRootPassword {
-	font: 16px;
+#textBoxRootPassword {
+    font: 16px;
 }
- #textBoxVerifiedRootPassword {
-	font: 16px;
+#textBoxVerifiedRootPassword {
+    font: 16px;
 }
- #labelRootPassword {
-	font: 16px;
+#labelRootPassword {
+    font: 16px;
 }
- #labelRootPasswordError {
-	font: 16px;
+#labelRootPasswordError {
+    font: 16px;
+    color: #e06c75;
 }
 
 /* ########## COMBO BOX ########## */
 
 QComboBox {
-	font: 16px;
+    font: 16px;
+    background-color: #26262e;
+    color: #f2f2f2;
+    border: 1px solid #363642;
+    border-radius: 6px;
+    padding: 6px 12px;
+}
+
+QComboBox:hover {
+    border: 1px solid #5e6ad2;
+}
+
+QComboBox::drop-down {
+    border: none;
+    padding-right: 8px;
+}
+
+QComboBox QAbstractItemView {
+    background-color: #26262e;
+    color: #f2f2f2;
+    border: 1px solid #363642;
+    selection-background-color: #5e6ad2;
+    selection-color: #ffffff;
 }
 
 #mountPointComboBox::drop-down {
-	font: 16px;
+    font: 16px;
 }
 
 /* ########## SPIN BOX ########## */
 
 QSpinBox {
-	font: 16px;
+    font: 16px;
+    background-color: #26262e;
+    color: #f2f2f2;
+    border: 1px solid #363642;
+    border-radius: 6px;
+    padding: 6px;
 }
 
-QLineEdit {
-	font: 16px;
+/* ########## CHECK BOX & RADIO BUTTON ########## */
+
+QCheckBox, QRadioButton {
+    spacing: 8px;
 }
 
-/* ########## TREE VIEW ########## */
-
-QTreeView {
-	font: 16px;
-	show-decoration-selected: 0;
+QCheckBox::indicator, QRadioButton::indicator {
+    width: 18px;
+    height: 18px;
+    border: 1px solid #363642;
+    background-color: #26262e;
 }
 
-QTreeView::item {
-	padding: 2px;
+QCheckBox::indicator {
+    border-radius: 4px;
 }
 
-QTreeView::branch:has-siblings:!adjoins-item {
-}
-QTreeView::branch:has-siblings:adjoins-item {
-}
-QTreeView::branch:!has-children:!has-siblings:adjoins-item {
-}
-QTreeView::branch:has-children:!has-siblings:closed,
-QTreeView::branch:closed:has-children:has-siblings {
-}
-QTreeView::branch:open:has-children:!has-siblings,
-QTreeView::branch:open:has-children:has-siblings  {
+QRadioButton::indicator {
+    border-radius: 9px;
 }
 
-/* ########## CHECK BOX ########## */
+QCheckBox::indicator:hover, QRadioButton::indicator:hover {
+    border-color: #5e6ad2;
+}
 
-QCheckBox {
+QCheckBox::indicator:checked, QRadioButton::indicator:checked {
+    background-color: #5e6ad2;
+    border-color: #5e6ad2;
 }
-QCheckBox::indicator:unchecked {
+
+/* ########## PROGRESS BAR ########## */
+
+QProgressBar {
+    background-color: #26262e;
+    border: 1px solid #363642;
+    border-radius: 6px;
+    text-align: center;
+    color: #ffffff;
+    font-weight: bold;
+    min-height: 20px;
 }
-QCheckBox::indicator:checked {
-}
-QItemSelectionModel::Select {
+
+QProgressBar::chunk {
+    background-color: #5e6ad2;
+    border-radius: 5px;
 }
 
 /* ########## HEADER VIEW ########## */
 
 QHeaderView::section {
-  font : 16px;
+    font: 16px;
+    background-color: #26262e;
+    color: #f2f2f2;
+    padding: 6px;
+    border: 1px solid #363642;
 }
 
+/* ########## SCROLLBAR ########## */
+
+QScrollBar:vertical {
+    background-color: #18181d;
+    width: 10px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background-color: #363642;
+    border-radius: 5px;
+    min-height: 24px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background-color: #5e6ad2;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+QScrollBar:horizontal {
+    background-color: #18181d;
+    height: 10px;
+    margin: 0px;
+}
+
+QScrollBar::handle:horizontal {
+    background-color: #363642;
+    border-radius: 5px;
+    min-width: 24px;
+}
+
+QScrollBar::handle:horizontal:hover {
+    background-color: #5e6ad2;
+}
+
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+    width: 0px;
+}
+
+/* ########## TOOLTIP ########## */
+
+QToolTip {
+    background-color: #26262e;
+    color: #ffffff;
+    border: 1px solid #363642;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font: 14px;
+}
