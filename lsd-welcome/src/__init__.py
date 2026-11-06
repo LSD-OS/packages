@@ -8,9 +8,17 @@ from .system_config import (
     apply_timezone,
     set_install_mode,
 )
+from .timezone_picker import (
+    TimezoneManager,
+    TimezoneMapWidget,
+    TimezonePickerWidget,
+)
 
 __all__ = [
     "NetworkService",
+    "TimezoneManager",
+    "TimezoneMapWidget",
+    "TimezonePickerWidget",
     "apply_language",
     "apply_keyboard",
     "apply_timezone",
