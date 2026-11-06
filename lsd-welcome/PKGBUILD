@@ -1,15 +1,15 @@
 # Maintainer: Wendel <wende08@proton.me>
 pkgname=lsd-welcome
-pkgver=1.0.0
-pkgrel=7
-pkgdesc="TUI de boas-vindas da ISO live (idioma, teclado, timezone) e seu serviço OpenRC"
+pkgver=2.0.0
+pkgrel=1
+pkgdesc="Assistente grafico de boas-vindas do LSD_OS"
 arch=('any')
 url="https://github.com/LSD-OS/lsd-welcome"
 license=('GPL3')
-depends=('openrc' 'bash' 'sudo' 'kbd' 'curl' 'iputils')
+depends=('python' 'python-gobject' 'gtk4' 'libadwaita' 'networkmanager' 'sudo' 'kbd' 'curl' 'iputils')
 source=(
     'lsd-welcome'
-    'lsd-welcome.service'
+    'lsd-welcome.desktop'
     'lsd-braille.psfu.gz'
 )
 noextract=('lsd-braille.psfu.gz')
@@ -20,16 +20,45 @@ sha256sums=(
 )
 
 package() {
-    # Script da TUI (idioma, teclado, timezone) que roda no console antes
-    # do greeter na ISO live
+    # 1. Executável wrapper Python
     install -d -m 0755 "${pkgdir}/usr/bin"
-    install -m 0755 "${srcdir}/lsd-welcome" "${pkgdir}/usr/bin/lsd-welcome"
+    if [ -f "${srcdir}/lsd-welcome" ]; then
+        install -m 0755 "${srcdir}/lsd-welcome" "${pkgdir}/usr/bin/lsd-welcome"
+    else
+        install -m 0755 "${startdir}/lsd-welcome" "${pkgdir}/usr/bin/lsd-welcome"
+    fi
 
-    # Serviço OpenRC que sobe o script no tty1: executado antes do greeter.
-    install -d -m 0755 "${pkgdir}/etc/init.d"
-    install -m 0755 "${srcdir}/lsd-welcome.service" "${pkgdir}/etc/init.d/lsd-welcome"
+    # 2. Arquivo Desktop de autostart
+    install -d -m 0755 "${pkgdir}/etc/xdg/autostart"
+    if [ -f "${srcdir}/lsd-welcome.desktop" ]; then
+        install -m 0644 "${srcdir}/lsd-welcome.desktop" "${pkgdir}/etc/xdg/autostart/lsd-welcome.desktop"
+    else
+        install -m 0644 "${startdir}/lsd-welcome.desktop" "${pkgdir}/etc/xdg/autostart/lsd-welcome.desktop"
+    fi
 
-    # Fonte de console PSF2 com suporte completo a Braille (U+2800..U+28FF) e acentos latinos
-    install -d -m 0755 "${pkgdir}/usr/share/kbd/consolefonts"
-    install -m 0644 "${srcdir}/lsd-braille.psfu.gz" "${pkgdir}/usr/share/kbd/consolefonts/lsd-braille.psfu.gz"
+    # 3. Código-fonte Python da aplicação (/usr/lib/lsd-welcome/)
+    install -d -m 0755 "${pkgdir}/usr/lib/lsd-welcome"
+    if [ -d "${startdir}/src" ]; then
+        cp -dr --no-preserve=ownership "${startdir}/src/"* "${pkgdir}/usr/lib/lsd-welcome/"
+    elif [ -d "${srcdir}/src" ]; then
+        cp -dr --no-preserve=ownership "${srcdir}/src/"* "${pkgdir}/usr/lib/lsd-welcome/"
+    fi
+    rm -rf "${pkgdir}/usr/lib/lsd-welcome/__pycache__" "${pkgdir}/usr/lib/lsd-welcome/views/__pycache__"
+
+    # 4. Assets gráficos (/usr/share/lsd-welcome/assets/)
+    install -d -m 0755 "${pkgdir}/usr/share/lsd-welcome/assets"
+    if [ -d "${startdir}/assets" ]; then
+        cp -dr --no-preserve=ownership "${startdir}/assets/"* "${pkgdir}/usr/share/lsd-welcome/assets/"
+    elif [ -d "${srcdir}/assets" ]; then
+        cp -dr --no-preserve=ownership "${srcdir}/assets/"* "${pkgdir}/usr/share/lsd-welcome/assets/"
+    fi
+
+    # 5. Fonte de console PSF2 com suporte a Braille e acentos latinos
+    if [ -f "${srcdir}/lsd-braille.psfu.gz" ]; then
+        install -d -m 0755 "${pkgdir}/usr/share/kbd/consolefonts"
+        install -m 0644 "${srcdir}/lsd-braille.psfu.gz" "${pkgdir}/usr/share/kbd/consolefonts/lsd-braille.psfu.gz"
+    elif [ -f "${startdir}/lsd-braille.psfu.gz" ]; then
+        install -d -m 0755 "${pkgdir}/usr/share/kbd/consolefonts"
+        install -m 0644 "${startdir}/lsd-braille.psfu.gz" "${pkgdir}/usr/share/kbd/consolefonts/lsd-braille.psfu.gz"
+    fi
 }

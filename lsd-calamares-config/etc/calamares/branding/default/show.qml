@@ -60,18 +60,18 @@ Presentation
 
     Image {
         id: background2
-        source: "2-alci.png"
+        source: "logo.png"
         width: parent.width; height: parent.height
         horizontalAlignment: Image.AlignCenter
         verticalAlignment: Image.AlignTop
-        fillMode: Image.Stretch
+        fillMode: Image.PreserveAspectFit
         anchors.fill: parent
     	}
 
     Text {
-        anchors.horizontalCenter: background.horizontalCenter
-        anchors.top: background.bottom
-        text: "ALCI"
+        anchors.horizontalCenter: background2.horizontalCenter
+        anchors.top: background2.bottom
+        text: "LSD_OS"
         wrapMode: Text.WordWrap
         width: presentation.width
         horizontalAlignment: Text.Center
