@@ -1,0 +1,1 @@
+"""LSD-Welcome backend package."""
