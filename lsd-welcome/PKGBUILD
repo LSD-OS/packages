@@ -1,7 +1,7 @@
 # Maintainer: Wendel <wende08@proton.me>
 pkgname=lsd-welcome
 pkgver=2.0.0
-pkgrel=2
+pkgrel=3
 pkgdesc="Assistente grafico de boas-vindas do LSD_OS"
 arch=('any')
 url="https://github.com/LSD-OS/lsd-welcome"
