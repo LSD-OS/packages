@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Boas-Vindas ao LSD_OS
+GenericName=Assistente de Boas-Vindas e Configuração
+Comment=Configure idioma, tema, teclado e rede antes de instalar ou experimentar o sistema
+Exec=lsd-welcome
+Icon=preferences-desktop-locale
+Terminal=false
+Categories=System;Settings;Utility;
+StartupNotify=true
+X-GNOME-Autostart-enabled=true
+X-Cosmic-Autostart=true

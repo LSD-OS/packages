@@ -16,13 +16,17 @@ def _sudo_write_file(file_path: str | Path, content: str) -> None:
     """Helper to write content to a root-owned file using sudo tee."""
     target_path = Path(file_path)
     parent_dir = target_path.parent
-    subprocess.run(["sudo", "mkdir", "-p", str(parent_dir)], check=False)
-    subprocess.run(
-        ["sudo", "tee", str(target_path)],
-        input=content.encode("utf-8"),
-        stdout=subprocess.DEVNULL,
-        check=True,
-    )
+    try:
+        subprocess.run(["sudo", "mkdir", "-p", str(parent_dir)], check=False, stderr=subprocess.DEVNULL)
+        subprocess.run(
+            ["sudo", "tee", str(target_path)],
+            input=content.encode("utf-8"),
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=True,
+        )
+    except Exception:
+        pass
 
 
 def apply_language(locale_str: str) -> None:
@@ -73,7 +77,7 @@ def apply_keyboard(xkb_layout: str, xkb_variant: str, vconsole_keymap: str) -> N
     vconsole_content = f"KEYMAP={vconsole_keymap}\n"
     _sudo_write_file("/etc/vconsole.conf", vconsole_content)
 
-    subprocess.run(["sudo", "loadkeys", vconsole_keymap], check=False)
+    subprocess.run(["sudo", "loadkeys", vconsole_keymap], check=False, stderr=subprocess.DEVNULL)
 
 
 def apply_timezone(timezone_str: str) -> None:
@@ -92,10 +96,14 @@ def apply_timezone(timezone_str: str) -> None:
             pass
 
     target_zoneinfo = f"/usr/share/zoneinfo/{timezone_str}"
-    subprocess.run(
-        ["sudo", "ln", "-sf", target_zoneinfo, "/etc/localtime"],
-        check=True,
-    )
+    try:
+        subprocess.run(
+            ["sudo", "ln", "-sf", target_zoneinfo, "/etc/localtime"],
+            check=True,
+            stderr=subprocess.DEVNULL,
+        )
+    except Exception:
+        pass
 
     _sudo_write_file("/etc/timezone", f"{timezone_str}\n")
 

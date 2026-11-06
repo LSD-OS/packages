@@ -1,4 +1,4 @@
-"""LSD-Welcome backend package."""
+"""LSD-Welcome backend and UI package."""
 
 from .network_manager import NetworkService
 from .system_config import (
@@ -13,8 +13,14 @@ from .timezone_picker import (
     TimezoneMapWidget,
     TimezonePickerWidget,
 )
+from .app import (
+    WelcomeWizard,
+    LsdWelcomeApplication,
+)
 
 __all__ = [
+    "WelcomeWizard",
+    "LsdWelcomeApplication",
     "NetworkService",
     "TimezoneManager",
     "TimezoneMapWidget",
