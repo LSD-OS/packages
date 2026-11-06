@@ -7,58 +7,35 @@ arch=('any')
 url="https://github.com/LSD-OS/lsd-welcome"
 license=('GPL3')
 depends=('python' 'python-gobject' 'gtk4' 'libadwaita' 'networkmanager' 'sudo' 'kbd' 'curl' 'iputils')
-source=(
-    'lsd-welcome'
-    'lsd-welcome.desktop'
-    'lsd-braille.psfu.gz'
-)
-noextract=('lsd-braille.psfu.gz')
-sha256sums=(
-    'SKIP'
-    'SKIP'
-    'SKIP'
-)
+makedepends=('git')
+source=("$pkgname::git+$url.git")
+sha256sums=('SKIP')
 
 package() {
+    if [ -d "${srcdir}/${pkgname}" ]; then
+        cd "${srcdir}/${pkgname}"
+    elif [ -d "${startdir}/../../lsd-welcome" ]; then
+        cd "${startdir}/../../lsd-welcome"
+    fi
+
     # 1. Executável wrapper Python
     install -d -m 0755 "${pkgdir}/usr/bin"
-    if [ -f "${srcdir}/lsd-welcome" ]; then
-        install -m 0755 "${srcdir}/lsd-welcome" "${pkgdir}/usr/bin/lsd-welcome"
-    else
-        install -m 0755 "${startdir}/lsd-welcome" "${pkgdir}/usr/bin/lsd-welcome"
-    fi
+    install -m 0755 "lsd-welcome" "${pkgdir}/usr/bin/lsd-welcome"
 
     # 2. Arquivo Desktop de autostart
     install -d -m 0755 "${pkgdir}/etc/xdg/autostart"
-    if [ -f "${srcdir}/lsd-welcome.desktop" ]; then
-        install -m 0644 "${srcdir}/lsd-welcome.desktop" "${pkgdir}/etc/xdg/autostart/lsd-welcome.desktop"
-    else
-        install -m 0644 "${startdir}/lsd-welcome.desktop" "${pkgdir}/etc/xdg/autostart/lsd-welcome.desktop"
-    fi
+    install -m 0644 "lsd-welcome.desktop" "${pkgdir}/etc/xdg/autostart/lsd-welcome.desktop"
 
     # 3. Código-fonte Python da aplicação (/usr/lib/lsd-welcome/)
     install -d -m 0755 "${pkgdir}/usr/lib/lsd-welcome"
-    if [ -d "${startdir}/src" ]; then
-        cp -dr --no-preserve=ownership "${startdir}/src/"* "${pkgdir}/usr/lib/lsd-welcome/"
-    elif [ -d "${srcdir}/src" ]; then
-        cp -dr --no-preserve=ownership "${srcdir}/src/"* "${pkgdir}/usr/lib/lsd-welcome/"
-    fi
+    cp -dr --no-preserve=ownership src/* "${pkgdir}/usr/lib/lsd-welcome/"
     rm -rf "${pkgdir}/usr/lib/lsd-welcome/__pycache__" "${pkgdir}/usr/lib/lsd-welcome/views/__pycache__"
 
     # 4. Assets gráficos (/usr/share/lsd-welcome/assets/)
     install -d -m 0755 "${pkgdir}/usr/share/lsd-welcome/assets"
-    if [ -d "${startdir}/assets" ]; then
-        cp -dr --no-preserve=ownership "${startdir}/assets/"* "${pkgdir}/usr/share/lsd-welcome/assets/"
-    elif [ -d "${srcdir}/assets" ]; then
-        cp -dr --no-preserve=ownership "${srcdir}/assets/"* "${pkgdir}/usr/share/lsd-welcome/assets/"
-    fi
+    cp -dr --no-preserve=ownership assets/* "${pkgdir}/usr/share/lsd-welcome/assets/"
 
     # 5. Fonte de console PSF2 com suporte a Braille e acentos latinos
-    if [ -f "${srcdir}/lsd-braille.psfu.gz" ]; then
-        install -d -m 0755 "${pkgdir}/usr/share/kbd/consolefonts"
-        install -m 0644 "${srcdir}/lsd-braille.psfu.gz" "${pkgdir}/usr/share/kbd/consolefonts/lsd-braille.psfu.gz"
-    elif [ -f "${startdir}/lsd-braille.psfu.gz" ]; then
-        install -d -m 0755 "${pkgdir}/usr/share/kbd/consolefonts"
-        install -m 0644 "${startdir}/lsd-braille.psfu.gz" "${pkgdir}/usr/share/kbd/consolefonts/lsd-braille.psfu.gz"
-    fi
+    install -d -m 0755 "${pkgdir}/usr/share/kbd/consolefonts"
+    install -m 0644 "lsd-braille.psfu.gz" "${pkgdir}/usr/share/kbd/consolefonts/lsd-braille.psfu.gz"
 }
